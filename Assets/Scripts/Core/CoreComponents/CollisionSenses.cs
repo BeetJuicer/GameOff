@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Baracuda.Monitoring;
 
 public class CollisionSenses : CoreComponent {
 
@@ -53,6 +54,7 @@ public class CollisionSenses : CoreComponent {
 		get => Physics2D.OverlapCircle(CeilingCheck.position, groundCheckRadius, whatIsGround);
 	}
 
+	[Monitor]
 	public bool Ground {
 		get => BoxCastDrawer.BoxCastAndDraw(GroundCheck.position, groundCheckSize, 0f, Vector2.down, 0f, whatIsGround);
 	}
@@ -85,5 +87,16 @@ public class CollisionSenses : CoreComponent {
 		Gizmos.DrawLine(wallCheck.position, wallCheck.position + Vector3.right * Movement.FacingDirection * wallCheckDistance);
 
 	//	Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+	}
+
+	protected override void Awake()
+	{
+		base.Awake();
+		this.StartMonitoring();
+	}
+
+	private void OnDestroy()
+	{
+		this.StopMonitoring();
 	}
 }

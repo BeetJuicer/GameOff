@@ -10,7 +10,7 @@ public class PlayerInAirState : PlayerState {
 	private Movement movement;
 	private CollisionSenses collisionSenses;
 
-	//Input
+	//---Input
 	private int xInput;
 	private bool jumpInput;
 	private bool jumpInputStop;
@@ -18,7 +18,7 @@ public class PlayerInAirState : PlayerState {
 	private bool dashInput;
 	private bool dodgeInput;
 
-	//Checks
+	//---Checks
 	private bool isGrounded;
 	private bool isTouchingWall;
 	private bool isTouchingWallBack;
@@ -84,6 +84,10 @@ public class PlayerInAirState : PlayerState {
 		else if (jumpInput && player.JumpState.CanJump())
 		{
 			stateMachine.ChangeState(player.JumpState);
+		}
+		else if (jumpInput && !player.JumpState.CanJump())
+		{
+			stateMachine.ChangeState(player.GlideState);
 		}
 		else
 		{

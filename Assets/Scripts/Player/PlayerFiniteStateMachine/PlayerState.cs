@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Baracuda.Monitoring;
 
 public class PlayerState
 {
@@ -27,12 +28,21 @@ public class PlayerState
         core = player.Core;
     }
 
+    public virtual void Awake()
+    {
+        this.StartMonitoring();
+    }
+
+    public virtual void OnDestroy()
+    {
+        this.StopMonitoring();
+    }
+
     public virtual void Enter()
     {
         DoChecks();
         player.Anim.SetBool(animBoolName, true);
         startTime = Time.time;
-        //Debug.Log(animBoolName);
         isAnimationFinished = false;
         isExitingState = false;
     }
