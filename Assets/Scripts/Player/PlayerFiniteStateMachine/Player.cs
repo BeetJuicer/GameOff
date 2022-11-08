@@ -66,6 +66,7 @@ public class Player : MonitoredBehaviour
 
     private void Update()
     {
+        Debug.Log(StateMachine.CurrentState);
         Core.LogicUpdate();
         StateMachine.CurrentState.LogicUpdate();
     }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class PlayerGlideState : PlayerAbilityState
 {
@@ -26,7 +27,11 @@ public class PlayerGlideState : PlayerAbilityState
     {
         base.LogicUpdate();
 
+        // Set X velocity to x input * movementSpeed / glideMovement Speed
+
         Movement?.SetVelocityY(1f);
+
+        // Set ability done to true after glide duration or glide input is stopped or is grounded
         isAbilityDone = true;
     }
 
