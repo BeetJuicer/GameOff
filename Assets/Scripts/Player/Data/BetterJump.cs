@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class BetterJump : MonoBehaviour
 {
-    public float fallMultiplier = 2.5f;
-    public float lowJumpMultiplier = 2f;
 
     private Rigidbody2D rb;
     private PlayerInputHandler playerInput;
     private Player player;
+
+    public float fallMultiplier = 2.5f;
+    public float lowJumpMultiplier = 2f;
 
     private float playerGravity;
 
@@ -33,7 +34,6 @@ public class BetterJump : MonoBehaviour
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;      
         }
-
         
         // Set the gravity scale to half at the peak of the player's jump.
         if(rb.velocity.y == 0 && player.StateMachine.CurrentState == player.InAirState && !playerInput.JumpInputStop)
@@ -45,6 +45,5 @@ public class BetterJump : MonoBehaviour
         {
             rb.gravityScale = playerGravity;
         }
-
     }
 }

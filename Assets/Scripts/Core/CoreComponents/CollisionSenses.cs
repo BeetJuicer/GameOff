@@ -54,7 +54,6 @@ public class CollisionSenses : CoreComponent {
 	}
 
 	public bool Ground {
-		//get => Physics2D.OverlapCircle(GroundCheck.position, groundCheckRadius, whatIsGround);
 		get => BoxCastDrawer.BoxCastAndDraw(GroundCheck.position, groundCheckSize, 0f, Vector2.down, 0f, whatIsGround);
 	}
 
