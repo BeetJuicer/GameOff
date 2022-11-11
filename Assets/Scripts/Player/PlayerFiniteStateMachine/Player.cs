@@ -32,9 +32,13 @@ public class Player : MonitoredBehaviour
     #region Other Variables         
 
     private Vector2 workspace;
+    [Monitor]
+    private string state;
     #endregion
 
     #region Unity Callback Functions
+    
+    // OnDestroy and Awake for Monitoring
     protected override void OnDestroy()
     {
         base.OnDestroy();
@@ -42,6 +46,7 @@ public class Player : MonitoredBehaviour
 
     protected override void Awake()
     {
+        base.Awake();
         Core = GetComponentInChildren<Core>();
 
         StateMachine = new PlayerStateMachine();
@@ -66,7 +71,9 @@ public class Player : MonitoredBehaviour
 
     private void Update()
     {
-        Debug.Log(StateMachine.CurrentState);
+        // Monitor the current state.
+        state = StateMachine.CurrentState.ToString();
+
         Core.LogicUpdate();
         StateMachine.CurrentState.LogicUpdate();
     }

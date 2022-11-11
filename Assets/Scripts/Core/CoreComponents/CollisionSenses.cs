@@ -54,7 +54,6 @@ public class CollisionSenses : CoreComponent {
 		get => Physics2D.OverlapCircle(CeilingCheck.position, groundCheckRadius, whatIsGround);
 	}
 
-	[Monitor]
 	public bool Ground {
 		get => BoxCastDrawer.BoxCastAndDraw(GroundCheck.position, groundCheckSize, 0f, Vector2.down, 0f, whatIsGround);
 	}
@@ -79,15 +78,6 @@ public class CollisionSenses : CoreComponent {
     {
 		return ledgeCheckDistance;
     }
-
-    private void OnDrawGizmos()
-    {
-		Gizmos.color = Color.yellow;
-		Gizmos.DrawLine(ledgeCheckVertical.position, ledgeCheckVertical.position + (Vector3)(Vector2.down * ledgeCheckDistance));
-		Gizmos.DrawLine(wallCheck.position, wallCheck.position + Vector3.right * Movement.FacingDirection * wallCheckDistance);
-
-	//	Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
-	}
 
 	protected override void Awake()
 	{

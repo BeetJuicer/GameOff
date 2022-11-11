@@ -7,6 +7,10 @@ public class PlayerGlideState : PlayerAbilityState
 {
     private float origGravity;
 
+    private int xInput;
+    private bool jumpInput;
+    private bool jumpInputStop;
+
     public PlayerGlideState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
     }
@@ -28,11 +32,20 @@ public class PlayerGlideState : PlayerAbilityState
         base.LogicUpdate();
 
         // Set X velocity to x input * movementSpeed / glideMovement Speed
+        xInput = player.InputHandler.NormInputX;
+        jumpInput = player.InputHandler.JumpInput;
+        jumpInputStop = player.InputHandler.JumpInputStop;
 
-        Movement?.SetVelocityY(1f);
+        Movement?.CheckIfShouldFlip(xInput);
+        Movement?.SetVelocityX(playerData.movementVelocity * xInput);
+
+        Movement?.SetVelocityY(-1f);
 
         // Set ability done to true after glide duration or glide input is stopped or is grounded
-        isAbilityDone = true;
+        if (isGrounded || jumpInputStop)
+        {
+            isAbilityDone = true;
+        }
     }
 
     public override void Exit()
