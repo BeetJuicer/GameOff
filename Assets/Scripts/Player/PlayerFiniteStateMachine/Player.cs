@@ -57,6 +57,7 @@ public class Player : MonitoredBehaviour
         InAirState = new PlayerInAirState(this, StateMachine, playerData, "inAir");
         LandState = new PlayerLandState(this, StateMachine, playerData, "land");
         GlideState = new PlayerGlideState(this, StateMachine, playerData, "glide");
+
     }
 
     private void Start()
