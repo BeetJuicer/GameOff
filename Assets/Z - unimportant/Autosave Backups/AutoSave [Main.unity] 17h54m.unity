@@ -567,10 +567,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.16197182
+    y: 0.160401
+    width: 0.6760563
+    height: 0.6766917
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -2211,9 +2211,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.5
+  m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 5
   m_Material: {fileID: 6200000, guid: 7a7bd3cc964a93d46b8c6ad18b97ccb4, type: 2}
   m_Interpolate: 1

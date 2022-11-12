@@ -7,6 +7,7 @@ public class PlayerData : ScriptableObject
 {
     [Header("Move State")]
     public bool movementUsesAcceleration = true;
+    public bool doConserveMomentum = true;
     public float movementVelocity = 10f;
     public float acceleration = 1f;
     public float deceleration = 1f;
