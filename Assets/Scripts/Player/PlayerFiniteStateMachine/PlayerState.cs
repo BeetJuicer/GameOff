@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using Baracuda.Monitoring;
 
 public class PlayerState
 {
@@ -26,16 +25,6 @@ public class PlayerState
         this.playerData = playerData;
         this.animBoolName = animBoolName;
         core = player.Core;
-    }
-
-    public virtual void Awake()
-    {
-        this.StartMonitoring();
-    }
-
-    public virtual void OnDestroy()
-    {
-        this.StopMonitoring();
     }
 
     public virtual void Enter()

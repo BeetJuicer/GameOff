@@ -6,9 +6,6 @@ public class PlayerIdleState : PlayerGroundedState {
 	public PlayerIdleState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) {
 	}
 
-	private bool dashInput;
-	private bool dodgeInput;
-
 	public override void DoChecks() {
 		base.DoChecks();
 	}
@@ -24,10 +21,10 @@ public class PlayerIdleState : PlayerGroundedState {
 
 	public override void LogicUpdate() {
 		base.LogicUpdate();
+        Movement?.SetVelocityX(0f);
 
-		if (!isExitingState)
+        if (!isExitingState)
 		{
-
 			if (xInput != 0)
 			{
 				stateMachine.ChangeState(player.MoveState);

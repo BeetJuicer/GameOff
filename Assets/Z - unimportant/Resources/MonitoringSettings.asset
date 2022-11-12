@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: MonitoringSettings
   m_EditorClassIdentifier: 
   enableMonitoring: 2
-  autoInstantiateUI: 1
   asyncProfiling: 1
   openDisplayOnLoad: 1
   allowMultipleUIInstances: 0

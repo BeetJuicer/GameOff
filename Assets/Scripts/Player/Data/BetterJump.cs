@@ -1,9 +1,12 @@
+using Baracuda.Monitoring;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BetterJump : MonoBehaviour
+public class BetterJump : MonitoredBehaviour
 {
+    [Monitor]
+    private Vector2 velocity;
 
     private Rigidbody2D rb;
     private PlayerInputHandler playerInput;
@@ -14,8 +17,10 @@ public class BetterJump : MonoBehaviour
 
     private float playerGravity;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         rb = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInputHandler>();
         player = GetComponent<Player>();
@@ -23,9 +28,16 @@ public class BetterJump : MonoBehaviour
         playerGravity = rb.gravityScale;
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        velocity = rb.velocity;
+
         if(rb.velocity.y < 0)
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;

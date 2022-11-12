@@ -1,15 +1,14 @@
-﻿using System.Collections;
+﻿using Baracuda.Monitoring;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMoveState : PlayerGroundedState {
-	public PlayerMoveState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) {
+
+    public PlayerMoveState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) {
 	}
 
-	private bool dashInput;
-	private bool dodgeInput;
-
-	public override void DoChecks() {
+    public override void DoChecks() {
 		base.DoChecks();
 	}
 
@@ -26,9 +25,25 @@ public class PlayerMoveState : PlayerGroundedState {
 
 		Movement?.CheckIfShouldFlip(xInput);
 
-		Movement?.SetVelocityX(playerData.movementVelocity * xInput);
+		if (playerData.movementUsesAcceleration)
+		{
+			float targetSpeed = xInput * playerData.movementVelocity;
+			// Accelerate if there is player input. Else, decelerate
+			float accelRate = (xInput == 0) ? playerData.deceleration : playerData.acceleration;
 
-		if (xInput == 0)
+			float speedDif = targetSpeed - player.RB.velocity.x;
+			float movement = speedDif * accelRate;
+
+			player.RB.AddForce(movement * Vector2.right, ForceMode2D.Force);
+		}
+		else
+		{
+            // Without Acceleration
+            Movement?.SetVelocityX(playerData.movementVelocity * xInput);
+        }
+
+		// Only switch to idle state if done decelerating.
+		if (xInput == 0 && Mathf.Abs(player.RB.velocity.x) <= 0.5f)
 		{
 			stateMachine.ChangeState(player.IdleState);
 		}

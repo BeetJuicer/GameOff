@@ -12,8 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65ca48738a7a0264884c833183f68271, type: 3}
   m_Name: playerData
   m_EditorClassIdentifier: 
+  movementUsesAcceleration: 1
   movementVelocity: 10
-  jumpVelocity: 15
+  acceleration: 0.9
+  deceleration: 0.9
+  jumpVelocity: 18
   amountOfJumps: 1
   coyoteTime: 0.1
-  variableJumpHeightMultiplier: 1
+  variableJumpHeightMultiplier: 0.5
+  inAirAcceleration: 1
+  inAirDeceleration: 1
+  glideFallVelocity: -1.5
+  glideVelocityMultiplier: 1

@@ -15,11 +15,6 @@ public class PlayerGlideState : PlayerAbilityState
     {
     }
 
-    public override void Awake()
-    {
-        base.Awake();
-    }
-
     public override void Enter()
     {
         base.Enter();
@@ -37,9 +32,10 @@ public class PlayerGlideState : PlayerAbilityState
         jumpInputStop = player.InputHandler.JumpInputStop;
 
         Movement?.CheckIfShouldFlip(xInput);
-        Movement?.SetVelocityX(playerData.movementVelocity * xInput);
 
-        Movement?.SetVelocityY(-1f);
+        // Adjust
+        Movement?.SetVelocityX(playerData.movementVelocity * playerData.glideVelocityMultiplier * xInput);
+        Movement?.SetVelocityY(playerData.glideFallVelocity);
 
         // Set ability done to true after glide duration or glide input is stopped or is grounded
         if (isGrounded || jumpInputStop)
@@ -51,11 +47,7 @@ public class PlayerGlideState : PlayerAbilityState
     public override void Exit()
     {
         base.Exit();
-        player.RB.gravityScale = origGravity;
-    }
 
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
+        player.RB.gravityScale = origGravity;
     }
 }

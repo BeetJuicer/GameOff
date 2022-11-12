@@ -32,7 +32,7 @@ public class Player : MonitoredBehaviour
     #region Other Variables         
 
     private Vector2 workspace;
-    [Monitor]
+//    [Monitor]
     private string state;
     #endregion
 

@@ -44,30 +44,36 @@ SpriteAtlas:
     secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
+    - {fileID: 7899872008009386792, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
+    - {fileID: 1574020082409589397, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
+    - {fileID: 7756958629790530571, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
+    - {fileID: -2067588236858886467, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
     - {fileID: -8866019413877891000, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
     - {fileID: 2702985212887769108, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
     - {fileID: 2705012260097542653, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
     - {fileID: -8628734611252528171, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
-    - {fileID: -2722016810462600388, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
-    - {fileID: -2757507167723873784, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
-  - {fileID: -2757507167723873784, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
   - {fileID: 2702985212887769108, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
-  - {fileID: -2722016810462600388, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
   - {fileID: -8628734611252528171, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
   - {fileID: 2705012260097542653, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
   - {fileID: -8866019413877891000, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
+  - {fileID: 1574020082409589397, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
+  - {fileID: -2067588236858886467, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
+  - {fileID: 7756958629790530571, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
+  - {fileID: 7899872008009386792, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
   m_PackedSpriteNamesToIndex:
-  - Terrain (16 x 16)_176_128_16_16
   - Terrain (16 x 16)_64_128_16_16
-  - Terrain (16 x 16)_176_80_16_16
   - Terrain (16 x 16)_80_128_16_16
   - Terrain (16 x 16)_80_112_16_16
   - Terrain (16 x 16)_64_112_16_16
+  - Blocks (16 x 16)_128_64_16_16
+  - Blocks (16 x 16)_192_48_16_16
+  - Blocks (16 x 16)_144_64_16_16
+  - Blocks (16 x 16)_0_32_16_16
   m_RenderDataMap: {}
   m_Tag: IceWorld_Atlas
   m_IsVariant: 0
