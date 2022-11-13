@@ -63,6 +63,7 @@ public class PlayerAnimator : MonoBehaviour
 
     private void CheckAnimationState()
     {
+        /*
         if (startedJumping)
         {
             anim.SetTrigger("Jump");
@@ -81,6 +82,8 @@ public class PlayerAnimator : MonoBehaviour
             return;
         }
 
-        anim.SetFloat("Vel Y", mov.RB.velocity.y);
+        anim.SetFloat("Vel Y", mov.RB.velocity.y);*/
+
+        anim.SetBool("move", mov.NormInputX != 0 && mov.IsRunning);
     }
 }

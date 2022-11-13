@@ -7,6 +7,7 @@
  */
 
 using Baracuda.Monitoring;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -28,6 +29,9 @@ public class PlayerMovement : MonitoredBehaviour
 	//These are fields which can are public allowing for other sctipts to read them
 	//but can only be privately written to.
 	public bool IsFacingRight { get; private set; }
+
+    [Monitor]
+    public bool IsRunning { get; private set; }
     [Monitor]
     public bool IsJumping { get; private set; }
     [Monitor]
@@ -97,7 +101,7 @@ public class PlayerMovement : MonitoredBehaviour
 		base.Awake();
 
 		RB = GetComponent<Rigidbody2D>();
-		//AnimHandler = GetComponent<PlayerAnimator>();
+		AnimHandler = GetComponent<PlayerAnimator>();
 	}
 
 	protected override void OnDestroy()
@@ -169,7 +173,7 @@ public class PlayerMovement : MonitoredBehaviour
 			{
 				if (LastOnGroundTime < -0.1f)
 				{
-					//AnimHandler.justLanded = true;
+					AnimHandler.justLanded = true;
 				}
 
 				LastOnGroundTime = Data.coyoteTime; //if so sets the lastGrounded to coyoteTime
@@ -189,6 +193,10 @@ public class PlayerMovement : MonitoredBehaviour
 			LastOnWallTime = Mathf.Max(LastOnWallLeftTime, LastOnWallRightTime);
 		}
 		#endregion
+
+		#region RUN CHECK
+		IsRunning = (NormInputX != 0 && LastOnGroundTime > 0);
+        #endregion
 
 		#region JUMP CHECKS
 		if (IsJumping && RB.velocity.y < 0)
@@ -223,7 +231,7 @@ public class PlayerMovement : MonitoredBehaviour
 				_isJumpFalling = false;
 				Jump();
 
-				//AnimHandler.startedJumping = true;
+				AnimHandler.startedJumping = true;
 			}
 			//WALL JUMP
 			else if (CanWallJump() && LastPressedJumpTime > 0)
