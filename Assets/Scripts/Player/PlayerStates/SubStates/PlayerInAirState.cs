@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PlayerInAirState : PlayerState {
+public class PlayerInAirState : PlayerState
+{
 
 	protected Movement Movement { get => movement ?? core.GetCoreComponent(ref movement); }
 	private CollisionSenses CollisionSenses { get => collisionSenses ?? core.GetCoreComponent(ref collisionSenses); }
@@ -32,17 +31,19 @@ public class PlayerInAirState : PlayerState {
 
 	private float startWallJumpCoyoteTime;
 
-	public PlayerInAirState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) {
+	public PlayerInAirState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
+	{
 	}
 
-	public override void DoChecks() 
+	public override void DoChecks()
 	{
 		base.DoChecks();
 
 		oldIsTouchingWall = isTouchingWall;
 		oldIsTouchingWallBack = isTouchingWallBack;
 
-		if (CollisionSenses) {
+		if (CollisionSenses)
+		{
 			isGrounded = CollisionSenses.Ground;
 			isTouchingWall = CollisionSenses.WallFront;
 			isTouchingWallBack = CollisionSenses.WallBack;
@@ -50,12 +51,12 @@ public class PlayerInAirState : PlayerState {
 		}
 	}
 
-	public override void Enter() 
+	public override void Enter()
 	{
 		base.Enter();
 	}
 
-	public override void Exit() 
+	public override void Exit()
 	{
 		base.Exit();
 
@@ -65,7 +66,7 @@ public class PlayerInAirState : PlayerState {
 		isTouchingWallBack = false;
 	}
 
-	public override void LogicUpdate() 
+	public override void LogicUpdate()
 	{
 		base.LogicUpdate();
 
@@ -92,36 +93,60 @@ public class PlayerInAirState : PlayerState {
 		else
 		{
 			Movement?.CheckIfShouldFlip(xInput);
-			Movement?.SetVelocityX(playerData.movementVelocity * xInput);
+
+			if (playerData.movementUsesAcceleration)
+			{
+				player.HandleAcceleration();
+			}
+			else
+			{
+				Movement?.SetVelocityX(playerData.movementVelocity * xInput);
+			}
+
+			IncreaseFallGravity();
 
 			player.Anim.SetFloat("yVelocity", Movement.CurrentVelocity.y);
 			player.Anim.SetFloat("xVelocity", Mathf.Abs(Movement.CurrentVelocity.x));
 		}
 	}
 
-	private void CheckJumpMultiplier() 
+	private void CheckJumpMultiplier()
 	{
-		if (isJumping) {
-			if (jumpInputStop) 
+		if (isJumping)
+		{
+			if (jumpInputStop)
 			{
 				Movement?.SetVelocityY(Movement.CurrentVelocity.y * playerData.variableJumpHeightMultiplier);
 				isJumping = false;
-			} 
-			else if (Movement.CurrentVelocity.y <= 0f) 
+			}
+			else if (Movement.CurrentVelocity.y <= 0f)
 			{
 				isJumping = false;
 			}
 		}
 	}
 
-	public override void PhysicsUpdate() 
+    private void IncreaseFallGravity()
+	{
+		// Increase gravity when falling.
+		if (player.RB.velocity.y < 0)
+		{
+			player.RB.velocity += Vector2.up * Physics2D.gravity.y * (playerData.fallMultiplier - 1) * Time.deltaTime;
+		}
+		else if (player.RB.velocity.y > 0 && jumpInputStop)
+		{
+			player.RB.velocity += Vector2.up * Physics2D.gravity.y * (playerData.lowJumpMultiplier - 1) * Time.deltaTime;
+		}
+	}
+
+	public override void PhysicsUpdate()
 	{
 		base.PhysicsUpdate();
 	}
 
-	private void CheckCoyoteTime() 
+	private void CheckCoyoteTime()
 	{
-		if (coyoteTime && Time.time > startTime + playerData.coyoteTime) 
+		if (coyoteTime && Time.time > startTime + playerData.coyoteTime)
 		{
 			coyoteTime = false;
 			player.JumpState.DecreaseAmountOfJumpsLeft();

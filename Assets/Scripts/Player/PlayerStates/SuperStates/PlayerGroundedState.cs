@@ -15,7 +15,7 @@ public class PlayerGroundedState : PlayerState {
 	private CollisionSenses collisionSenses;
 
 	private bool JumpInput;
-	private bool isGrounded;
+	protected bool isGrounded;
 
 	public PlayerGroundedState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) {
 	}

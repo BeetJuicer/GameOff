@@ -19,8 +19,16 @@ public class PlayerData : ScriptableObject
     [Header("In Air State")]
     public float coyoteTime = 0.2f;
     public float variableJumpHeightMultiplier = 0.5f;
+
     public float inAirAcceleration = 1;
     public float inAirDeceleration = 1;
+
+    public float fallMultiplier = 2.5f;
+    public float lowJumpMultiplier = 2f;
+
+    public float jumpApexAccelerationMultiplier = 1.2f;
+    public float jumpApexSpeedMultiplier = 1.2f;
+
 
     [Header("Glide State")]
     public float glideFallVelocity = -1.5f;

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: playerData
   m_EditorClassIdentifier: 
   movementUsesAcceleration: 1
+  doConserveMomentum: 1
   movementVelocity: 10
   acceleration: 0.9
   deceleration: 0.9
@@ -20,7 +21,9 @@ MonoBehaviour:
   amountOfJumps: 1
   coyoteTime: 0.1
   variableJumpHeightMultiplier: 0.5
-  inAirAcceleration: 1
-  inAirDeceleration: 1
+  inAirAcceleration: 0.9
+  inAirDeceleration: 0.9
+  fallMultiplier: 2.5
+  lowJumpMultiplier: 2
   glideFallVelocity: -1.5
   glideVelocityMultiplier: 1

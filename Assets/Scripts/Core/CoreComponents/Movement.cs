@@ -84,6 +84,5 @@ public class Movement : CoreComponent
         FacingDirection *= -1;
         RB.transform.Rotate(0.0f, 180.0f, 0.0f);
     }
-
     #endregion
 }

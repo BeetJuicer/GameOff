@@ -27,34 +27,10 @@ public class PlayerMoveState : PlayerGroundedState {
 
 		if (playerData.movementUsesAcceleration)
 		{
-			float targetSpeed = xInput * playerData.movementVelocity;
-			float targetDirection = Mathf.Sign(targetSpeed);
-			// Accelerate if there is player input. Else, decelerate
-			float accelRate = (xInput == 0) ? playerData.deceleration : playerData.acceleration;
-
-            #region Conserve Momentum
-            // We won't slow the player down if they are moving in their desired direction but at a greater speed than their maxSpeed
-            if (playerData.doConserveMomentum && xInput == targetDirection && xInput != 0 && !CollisionSenses.Ground)
-            {
-                // Prevent any deceleration from happening, or in other words conserve are current momentum
-                // You could experiment with allowing for the player to slightly increae their speed whilst in this "state"
-
-				if (Mathf.Abs(player.RB.velocity.x) > Mathf.Abs(targetSpeed))
-				{
-					accelRate = 0;
-				}
-            }
-            #endregion
-
-            float speedDif = targetSpeed - player.RB.velocity.x;
-			float movement = speedDif * accelRate;
-
-			player.RB.AddForce(movement * Vector2.right, ForceMode2D.Force);
-
+			player.HandleAcceleration();
 		}
 		else
 		{
-            // Without Acceleration
             Movement?.SetVelocityX(playerData.movementVelocity * xInput);
         }
 

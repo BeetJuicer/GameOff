@@ -38,6 +38,7 @@ public class BetterJump : MonitoredBehaviour
     {
         velocity = rb.velocity;
 
+        // Increase gravity when falling.
         if(rb.velocity.y < 0)
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
@@ -48,13 +49,15 @@ public class BetterJump : MonitoredBehaviour
         }
         
         // Set the gravity scale to half at the peak of the player's jump.
-        if(rb.velocity.y == 0 && player.StateMachine.CurrentState == player.InAirState && !playerInput.JumpInputStop)
+        if(Mathf.Abs(rb.velocity.y) < .3f && player.StateMachine.CurrentState == player.InAirState && !playerInput.JumpInputStop)
         {
+            Debug.Log("Halved gravity");
             rb.gravityScale = playerGravity * 0.5f;
         }
         // Set the gravity scale back to normal once not at the peak or the jump button is let go.
         else if(rb.velocity.y != 0 || player.StateMachine.CurrentState != player.InAirState || playerInput.JumpInputStop)
         {
+            Debug.Log("Normal gravity");
             rb.gravityScale = playerGravity;
         }
     }
