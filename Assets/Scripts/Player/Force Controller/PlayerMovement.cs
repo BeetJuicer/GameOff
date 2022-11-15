@@ -22,6 +22,7 @@ public class PlayerMovement : MonitoredBehaviour
     public Rigidbody2D RB { get; private set; }
 	//Script to handle all player animations, all references can be safely removed if you're importing into your own project.
 	public PlayerAnimator AnimHandler { get; private set; }
+	public PlayerOneWayPlatform PlatformHandler { get; private set; }
 	#endregion
 
 	#region STATE PARAMETERS
@@ -69,7 +70,7 @@ public class PlayerMovement : MonitoredBehaviour
     #region INPUT PARAMETERS
     private Vector2 _moveInput;
     public int NormInputX { get; private set; }
-    public int NormInputY { get; private set; }
+	public int NormInputY { get; private set; }
     public float LastPressedJumpTime { get; private set; }
 	public float LastPressedDashTime { get; private set; }
 	#endregion
@@ -89,12 +90,12 @@ public class PlayerMovement : MonitoredBehaviour
     #region LAYERS & TAGS
     [Header("Layers & Tags")]
 	[SerializeField] private LayerMask _groundLayer;
-	#endregion
+    #endregion
 
-	//-------Monitor Variables--------//
-	[Monitor]
+    #region MONITOR VARIABLES
+    [Monitor]
 	Vector2 currentVelocity = Vector2.zero;
-	//---------------//
+    #endregion
 
     protected override void Awake()
 	{
@@ -102,6 +103,7 @@ public class PlayerMovement : MonitoredBehaviour
 
 		RB = GetComponent<Rigidbody2D>();
 		AnimHandler = GetComponent<PlayerAnimator>();
+		PlatformHandler = GetComponent<PlayerOneWayPlatform>();
 	}
 
 	protected override void OnDestroy()
@@ -128,19 +130,22 @@ public class PlayerMovement : MonitoredBehaviour
     {
         if (context.started)
         {
-			OnJumpInput();
+			//JumpInput
+            LastPressedJumpTime = Data.jumpInputBufferTime;
         }
 
         if (context.canceled)
         {
-			OnJumpUpInput();
+			//JumpUpInput
+            if (CanJumpCut() || CanWallJumpCut())
+                _isJumpCut = true;
         }
     }
     public void OnDashInput(InputAction.CallbackContext context)
     {
         if (context.started)
         {
-			OnDashInput();
+            LastPressedDashTime = Data.dashInputBufferTime;
         }
     }
 	#endregion
@@ -194,7 +199,8 @@ public class PlayerMovement : MonitoredBehaviour
 		}
 		#endregion
 
-		#region RUN CHECK
+		#region RUN CHECKS
+
 		IsRunning = (NormInputX != 0 && LastOnGroundTime > 0);
         #endregion
 
@@ -362,25 +368,6 @@ public class PlayerMovement : MonitoredBehaviour
 		if (IsSliding)
 			Slide();
     }
-
-    #region INPUT CALLBACKS
-	//Methods which handle input detected in Update()
-    public void OnJumpInput()
-	{
-		LastPressedJumpTime = Data.jumpInputBufferTime;
-	}
-
-	public void OnJumpUpInput()
-	{
-		if (CanJumpCut() || CanWallJumpCut())
-			_isJumpCut = true;
-	}
-
-	public void OnDashInput()
-	{
-		LastPressedDashTime = Data.dashInputBufferTime;
-	}
-    #endregion
 
     #region GENERAL METHODS
     public void SetGravityScale(float scale)
@@ -593,7 +580,6 @@ public class PlayerMovement : MonitoredBehaviour
 	}
     #endregion
 
-
     #region CHECK METHODS
     public void CheckDirectionToFace(bool isMovingRight)
 	{
@@ -603,7 +589,7 @@ public class PlayerMovement : MonitoredBehaviour
 
     private bool CanJump()
     {
-		return LastOnGroundTime > 0 && !IsJumping;
+		return LastOnGroundTime > 0 && !IsJumping && PlatformHandler.currentOneWayPlatform == null;
     }
 
 	private bool CanWallJump()

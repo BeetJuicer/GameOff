@@ -2262,8 +2262,9 @@ GameObject:
   - component: {fileID: 8317574274842147126}
   - component: {fileID: 3387101970449049909}
   - component: {fileID: 7214467250224695365}
-  - component: {fileID: 8938023638185678925}
   - component: {fileID: 8938023638185678926}
+  - component: {fileID: 8938023638185678925}
+  - component: {fileID: 8938023638185678927}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -2496,7 +2497,19 @@ MonoBehaviour:
     m_ActionId: f513c4b1-16ec-47e0-a3b7-505e72beb36e
     m_ActionName: Gameplay/Jump[/Keyboard/space]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8938023638185678925}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: OnDashInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 32671732-74e8-4d26-b998-5b3f2d1d8e26
     m_ActionName: Gameplay/New action
   m_NeverAutoSwitchControlSchemes: 0
@@ -2504,3 +2517,20 @@ MonoBehaviour:
   m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &8938023638185678927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6031069319557409661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0de9f4df42657a441a1c83a6192e0ecc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxTilt: 0
+  tiltSpeed: 0
+  jumpFX: {fileID: 0}
+  landFX: {fileID: 0}
+  currentVelY: 0
