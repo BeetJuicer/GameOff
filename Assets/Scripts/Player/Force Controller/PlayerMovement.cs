@@ -14,9 +14,12 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonitoredBehaviour
 {
-	//Scriptable object which holds all the player's movement parameters. If you don't want to use it
-	//just paste in all the parameters, though you will need to manualy change all references in this script
-	public PlayerForceData Data;
+	[Monitor]
+	float movement;
+
+    //Scriptable object which holds all the player's movement parameters. If you don't want to use it
+    //just paste in all the parameters, though you will need to manualy change all references in this script
+    public PlayerForceData Data;
 
 	#region COMPONENTS
     public Rigidbody2D RB { get; private set; }
@@ -118,7 +121,7 @@ public class PlayerMovement : MonitoredBehaviour
 		IsFacingRight = true;
 	}
 
-    #region Input Events
+    #region INPUT EVENTS
     public void OnMoveInput(InputAction.CallbackContext context)
     {
         _moveInput = context.ReadValue<Vector2>();
@@ -446,7 +449,7 @@ public class PlayerMovement : MonitoredBehaviour
 		float speedDif = targetSpeed - RB.velocity.x;
 		//Calculate force along x-axis to apply to thr player
 
-		float movement = speedDif * accelRate;
+		movement = speedDif * accelRate;
 
 		//Convert this to a vector and apply to rigidbody
 		RB.AddForce(movement * Vector2.right, ForceMode2D.Force);
