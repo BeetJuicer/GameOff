@@ -31,15 +31,15 @@ public class PlayerMovement : MonitoredBehaviour
 	//but can only be privately written to.
 	public bool IsFacingRight { get; private set; }
 
-    [Monitor]
+//    [Monitor]
     public bool IsRunning { get; private set; }
-    [Monitor]
+//    [Monitor]
     public bool IsJumping { get; private set; }
-    [Monitor]
+//    [Monitor]
     public bool IsWallJumping { get; private set; }
-    [Monitor]
+//    [Monitor]
     public bool IsDashing { get; private set; }
-	[Monitor]
+//	[Monitor]
 	public bool IsSliding { get; private set; }
 
 	//Timers (also all fields, could be private and a method returning a bool could be used)
