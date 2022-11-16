@@ -598,10 +598,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: -0.375
+    y: -0.28125
+    width: 0.75
+    height: 0.5625
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -2678,6 +2678,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 868eb93d99f6f59498f3ee8a7e1d1f7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platform: 0
-  playerCollider: {fileID: 7214467250224695365}
-  PlayerMovement: {fileID: 8938023638185678925}

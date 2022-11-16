@@ -2067,6 +2067,7 @@ GameObject:
   - component: {fileID: 1883992872}
   - component: {fileID: 1883992871}
   - component: {fileID: 1883992870}
+  - component: {fileID: 1883992873}
   m_Layer: 6
   m_Name: Platform-OneWay
   m_TagString: OneWayPlatform
@@ -2085,7 +2086,7 @@ BoxCollider2D:
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
@@ -2160,13 +2161,32 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1883992869}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.4274, y: -7.783819, z: 0}
-  m_LocalScale: {x: 4.2435, y: 1, z: 1}
+  m_LocalPosition: {x: 17.4274, y: -10, z: 0}
+  m_LocalScale: {x: 5, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!251 &1883992873
+PlatformEffector2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883992869}
+  m_Enabled: 1
+  m_UseColliderMask: 1
+  m_ColliderMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RotationalOffset: 0
+  m_UseOneWay: 1
+  m_UseOneWayGrouping: 1
+  m_SurfaceArc: 180
+  m_UseSideFriction: 0
+  m_UseSideBounce: 0
+  m_SideArc: 1
 --- !u!1 &1915989798
 GameObject:
   m_ObjectHideFlags: 0
@@ -2658,4 +2678,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 868eb93d99f6f59498f3ee8a7e1d1f7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCollider: {fileID: 0}
+  collisionDisableTime: 0.25

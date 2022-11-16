@@ -51,9 +51,10 @@ public class PlayerMovement : MonitoredBehaviour
 	//Jump
 	private bool _isJumpCut;
 	private bool _isJumpFalling;
+	private bool isPassingThroughPlatform;
 
-	//Wall Jump
-	private float _wallJumpStartTime;
+    //Wall Jump
+    private float _wallJumpStartTime;
 	private int _lastWallJumpDir;
 
 	//Dash
@@ -202,9 +203,11 @@ public class PlayerMovement : MonitoredBehaviour
 		#region RUN CHECKS
 
 		IsRunning = (NormInputX != 0 && LastOnGroundTime > 0);
-        #endregion
+		#endregion
 
 		#region JUMP CHECKS
+		isPassingThroughPlatform = PlatformHandler.isPassingThroughPlatform;
+
 		if (IsJumping && RB.velocity.y < 0)
 		{
 			IsJumping = false;
@@ -229,7 +232,7 @@ public class PlayerMovement : MonitoredBehaviour
 		if (!IsDashing)
 		{
 			//Jump
-			if (CanJump() && LastPressedJumpTime > 0)
+			if (CanJump() && LastPressedJumpTime > 0 && !isPassingThroughPlatform)
 			{
 				IsJumping = true;
 				IsWallJumping = false;
@@ -589,7 +592,7 @@ public class PlayerMovement : MonitoredBehaviour
 
     private bool CanJump()
     {
-		return LastOnGroundTime > 0 && !IsJumping && PlatformHandler.currentOneWayPlatform == null;
+		return LastOnGroundTime > 0 && !IsJumping && !isPassingThroughPlatform;
     }
 
 	private bool CanWallJump()

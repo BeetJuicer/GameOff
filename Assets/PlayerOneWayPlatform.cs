@@ -1,26 +1,39 @@
+using Baracuda.Monitoring;
 using System.Collections;
 using UnityEngine;
 
-public class PlayerOneWayPlatform : MonoBehaviour
+public class PlayerOneWayPlatform : MonitoredBehaviour
 {
+    [Monitor]
     public GameObject currentOneWayPlatform { get; private set; }
+    public bool isPassingThroughPlatform { get; private set; }
+
+    [SerializeField]
+    private float collisionDisableTime = 0.25f;
 
     private BoxCollider2D playerCollider;
     private PlayerMovement playerMovement;
 
-    private void Awake()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
         playerCollider = GetComponent<BoxCollider2D>();
         playerMovement = GetComponent<PlayerMovement>();
     }
 
     private void Update()
     {
-        if (playerMovement.NormInputY < 0 && playerMovement.LastPressedJumpTime > 0)
+        if (playerMovement.NormInputY < 0)// && playerMovement.LastPressedJumpTime > 0)
         {
-            Debug.Log(0);
             if (currentOneWayPlatform != null)
-            {   
+            {
+                isPassingThroughPlatform = true;
                 StartCoroutine(DisableCollision());
             }
         }
@@ -47,7 +60,10 @@ public class PlayerOneWayPlatform : MonoBehaviour
         BoxCollider2D platformCollider = currentOneWayPlatform.GetComponent<BoxCollider2D>();
 
         Physics2D.IgnoreCollision(playerCollider, platformCollider);
-        yield return new WaitForSeconds(0.25f);
+
+        yield return new WaitForSeconds(collisionDisableTime);
+
         Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
+        isPassingThroughPlatform = false;
     }
 }
