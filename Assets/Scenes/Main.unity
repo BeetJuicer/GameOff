@@ -2346,7 +2346,7 @@ GameObject:
   - component: {fileID: 1883992871}
   - component: {fileID: 1883992870}
   - component: {fileID: 1883992873}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Platform-OneWay
   m_TagString: OneWayPlatform
   m_Icon: {fileID: 0}
@@ -2710,7 +2710,6 @@ GameObject:
   - component: {fileID: 8938023638185678925}
   - component: {fileID: 8938023638185678927}
   - component: {fileID: 8938023638185678928}
-  - component: {fileID: 8938023638185678929}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -2871,7 +2870,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6031069319557409661}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d400318f70dd93843abda1abaca1f6e3, type: 3}
   m_Name: 
@@ -2912,8 +2911,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8938023638185678929}
-        m_TargetAssemblyTypeName: Prime31.CharacterController2D, Assembly-CSharp
+      - m_Target: {fileID: 8938023638185678925}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
         m_MethodName: OnMoveInput
         m_Mode: 0
         m_Arguments:
@@ -2970,7 +2969,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6031069319557409661}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0de9f4df42657a441a1c83a6192e0ecc, type: 3}
   m_Name: 
@@ -2993,61 +2992,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collisionDisableTime: 0.25
---- !u!114 &8938023638185678929
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6031069319557409661}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9df0aecd0e7e15e4ab528586b64f698d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _moveInput: {x: 0, y: 0}
-  ignoreOneWayPlatformsThisFrame: 0
-  _skinWidth: 0.02
-  platformMask:
-    m_Bits: 64
-  triggerMask:
-    m_Bits: 2147483647
-  oneWayPlatformMask:
-    m_Bits: 256
-  slopeLimit: 30
-  jumpingThreshold: 0.07
-  slopeSpeedMultiplier:
-    m_Curve:
-    - time: -90
-      value: 1.5
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - time: 90
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  totalHorizontalRays: 20
-  totalVerticalRays: 20
-  _slopeLimitTangent: 3.7320504
-  _verticalDistanceBetweenRays: 0
-  _horizontalDistanceBetweenRays: 0
-  _isGoingUpSlope: 0

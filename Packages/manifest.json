@@ -2,6 +2,7 @@
   "dependencies": {
     "com.baracuda.runtime-monitoring": "3.4.0",
     "com.cammin.ldtkunity": "3.1.3",
+    "com.ta-david-yu.2d-platformer-hunter": "https://github.com/ta-david-yu/2D-Platformer-Hunter.git",
     "com.unity.cinemachine": "2.8.9",
     "com.unity.collab-proxy": "1.17.2",
     "com.unity.feature.2d": "1.0.0",

@@ -13,8 +13,8 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] [Range(0, 1)] private float tiltSpeed;
 
     [Header("Particle FX")]
-    [SerializeField] private GameObject jumpFX;
-    [SerializeField] private GameObject landFX;
+//    [SerializeField] private GameObject jumpFX;
+//    [SerializeField] private GameObject landFX;
     private ParticleSystem _jumpParticle;
     private ParticleSystem _landParticle;
 
@@ -29,8 +29,8 @@ public class PlayerAnimator : MonoBehaviour
         spriteRend = GetComponentInChildren<SpriteRenderer>();
         anim = spriteRend.GetComponent<Animator>();
 
-        _jumpParticle = jumpFX.GetComponent<ParticleSystem>();
-        _landParticle = landFX.GetComponent<ParticleSystem>();
+//        _jumpParticle = jumpFX.GetComponent<ParticleSystem>();
+//        _landParticle = landFX.GetComponent<ParticleSystem>();
     }
 
     private void LateUpdate()
