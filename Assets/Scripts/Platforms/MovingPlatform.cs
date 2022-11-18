@@ -6,7 +6,6 @@ public class MovingPlatform : MonoBehaviour
 {
     //TODO: Import player momentum and play around with it.
 
-
     // PLATFORM
     private Rigidbody2D rb;
     private PlatformState _state = PlatformState.Idle;

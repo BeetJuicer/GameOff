@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerOneWayPlatform : MonitoredBehaviour
 {
-    [Monitor]
+    //[Monitor]
     public GameObject currentOneWayPlatform { get; private set; }
     public bool isPassingThroughPlatform { get; private set; }
 

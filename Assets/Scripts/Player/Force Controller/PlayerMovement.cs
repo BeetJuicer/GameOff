@@ -14,9 +14,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonitoredBehaviour
 {
-	[Monitor]
-	float movement;
-
     //Scriptable object which holds all the player's movement parameters. If you don't want to use it
     //just paste in all the parameters, though you will need to manualy change all references in this script
     public PlayerForceData Data;
@@ -34,13 +31,13 @@ public class PlayerMovement : MonitoredBehaviour
 	//but can only be privately written to.
 	public bool IsFacingRight { get; private set; }
 
-//    [Monitor]
+//  [Monitor]
     public bool IsRunning { get; private set; }
-//    [Monitor]
+//  [Monitor]
     public bool IsJumping { get; private set; }
-//    [Monitor]
+//  [Monitor]
     public bool IsWallJumping { get; private set; }
-//    [Monitor]
+//  [Monitor]
     public bool IsDashing { get; private set; }
 //	[Monitor]
 	public bool IsSliding { get; private set; }
@@ -101,8 +98,10 @@ public class PlayerMovement : MonitoredBehaviour
     #endregion
 
     #region MONITOR VARIABLES
-    [Monitor]
+    //[Monitor]
 	Vector2 currentVelocity = Vector2.zero;
+    //[Monitor]
+    float movement;
     #endregion
 
     protected override void Awake()
@@ -160,7 +159,11 @@ public class PlayerMovement : MonitoredBehaviour
 
 	private void Update()
 	{
-		currentVelocity = RB.velocity;
+        #region MONITORED
+        currentVelocity = RB.velocity;
+        IsRunning = (NormInputX != 0 && LastOnGroundTime > 0);
+		#endregion
+
 		#region TIMERS
 		LastOnGroundTime -= Time.deltaTime;
 		LastOnWallTime -= Time.deltaTime;
@@ -234,11 +237,6 @@ public class PlayerMovement : MonitoredBehaviour
 			//Two checks needed for both left and right walls since whenever the play turns the wall checkPoints swap sides
 			LastOnWallTime = Mathf.Max(LastOnWallLeftTime, LastOnWallRightTime);
 		}
-		#endregion
-
-		#region RUN CHECKS
-
-		IsRunning = (NormInputX != 0 && LastOnGroundTime > 0);
 		#endregion
 
 		#region JUMP CHECKS
@@ -319,6 +317,7 @@ public class PlayerMovement : MonitoredBehaviour
 
         #region SLIDE CHECKS
 
+		// Check so that a negative velocity is only assignedonce the sliding state is entered.
 		if (!IsSliding)
 		{
 			if (CanSlide() && ((LastOnWallLeftTime > 0 && _moveInput.x < 0) || (LastOnWallRightTime > 0 && _moveInput.x > 0)))
@@ -335,14 +334,19 @@ public class PlayerMovement : MonitoredBehaviour
 		{
 			IsSliding = false;
         }
-		#endregion
+        #endregion
 
-		#region GRAVITY
-		if (!_isDashAttacking)
+        #region GLIDE CHECKS
+
+        #endregion
+
+        #region GRAVITY
+        if (!_isDashAttacking)
 		{
 			//Higher gravity if we've released the jump input or are falling
 			if (IsSliding)
 			{
+				//Assign a negative velocity when sliding, remove if an upward slide is needed.
 				if (shouldAssignNegative)
 				{
 					AssignNegativeVelocity();
@@ -614,8 +618,12 @@ public class PlayerMovement : MonitoredBehaviour
 		//The force applied can't be greater than the (negative) speedDifference * by how many times a second FixedUpdate() is called. For more info research how force are applied to rigidbodies.
 		movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif)  * (1 / Time.fixedDeltaTime), Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime));
 
-		Debug.Log(movement * Vector2.up);
 		RB.AddForce(movement * Vector2.up);
+	}
+
+	private void Glide()
+	{
+		//TODO
 	}
     #endregion
 
