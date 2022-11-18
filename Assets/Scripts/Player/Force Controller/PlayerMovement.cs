@@ -272,7 +272,7 @@ public class PlayerMovement : MonitoredBehaviour
 				_isJumpFalling = false;
 		}
 
-		if (!IsDashing)
+		if (!IsDashing && !IsGliding)
 		{
 			//Jump
 			if (CanJump() && LastPressedJumpTime > 0)
@@ -326,18 +326,11 @@ public class PlayerMovement : MonitoredBehaviour
 
         #region SLIDE CHECKS
 
-		// Check so that a negative velocity is only assignedonce the sliding state is entered.
-		if (!IsSliding)
+        if (!IsSliding && CanSlide() && ((LastOnWallLeftTime > 0 && _moveInput.x < 0) || (LastOnWallRightTime > 0 && _moveInput.x > 0))) 
 		{
-			if (CanSlide() && ((LastOnWallLeftTime > 0 && _moveInput.x < 0) || (LastOnWallRightTime > 0 && _moveInput.x > 0)))
-			{
-				shouldAssignNegative = true;
-			}
-		}
-
-        if (CanSlide() && ((LastOnWallLeftTime > 0 && _moveInput.x < 0) || (LastOnWallRightTime > 0 && _moveInput.x > 0))) 
-		{ 
-			IsSliding = true;
+            // Check so that a negative velocity is only assignedonce the sliding state is entered.
+            shouldAssignNegative = true;
+            IsSliding = true;
 		}
 		else
 		{
@@ -346,13 +339,19 @@ public class PlayerMovement : MonitoredBehaviour
         #endregion
 
         #region GLIDE CHECKS
-		if (CanGlide() && LastPressedJumpTime > 0 && !jumpInputStop)
+		if (!IsGliding && CanGlide() && LastPressedJumpTime > 0 && !jumpInputStop)
 		{
+			float yVelocity;
+			// Set the minimum y velocity to be -5(temporary)
+
+			yVelocity = Mathf.Clamp(RB.velocity.y, -5, 0);
+			RB.velocity = new Vector2(RB.velocity.x, yVelocity);
+
+			IsJumping = false;
             IsGliding = true;
-            Glide();
 		}
 
-		if (jumpInputStop || LastOnGroundTime > 0 || LastOnWallTime > 0)
+		if (IsGliding && (jumpInputStop || LastOnGroundTime > 0 || LastOnWallTime > 0))
 		{
 			IsGliding = false;
 		}
@@ -433,6 +432,9 @@ public class PlayerMovement : MonitoredBehaviour
 		//Handle Slide
 		if (IsSliding)
 			Slide();
+		//Handle Glide
+		if (IsGliding)
+			Glide();
     }
 
     #region GENERAL METHODS
@@ -507,9 +509,8 @@ public class PlayerMovement : MonitoredBehaviour
 
 		//Calculate difference between current velocity and desired velocity
 		float speedDif = targetSpeed - RB.velocity.x;
-		//Calculate force along x-axis to apply to thr player
-
-		movement = speedDif * accelRate;
+		//Calculate force along x-axis to apply to the player
+		float movement = speedDif * accelRate;
 
 		//Convert this to a vector and apply to rigidbody
 		RB.AddForce(movement * Vector2.right, ForceMode2D.Force);
@@ -634,7 +635,7 @@ public class PlayerMovement : MonitoredBehaviour
 	private void Slide()
 	{
 		//Works the same as the Run but only in the y-axis
-		//THis seems to work fine, buit maybe you'll find a better way to implement a slide into this system
+		//This seems to work fine, buit maybe you'll find a better way to implement a slide into this system
 		float speedDif = Data.slideSpeed - RB.velocity.y;	
 		float movement = speedDif * Data.slideAccel;
 		//So, we clamp the movement here to prevent any over corrections (these aren't noticeable in the Run)
@@ -646,9 +647,13 @@ public class PlayerMovement : MonitoredBehaviour
 
 	private void Glide()
 	{
-		// Apply a constant downward velocity
-		RB.AddForce(1 * Vector2.down);
-	}
+        float speedDif = Data.glideSpeed - RB.velocity.y;
+        float movement = speedDif * Data.glideAccel;
+        //Clamp movement between the speedDif and 0 to prevent positive values. ( Floating up )
+        movement = Mathf.Clamp(movement, 0, Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime));
+
+        RB.AddForce(movement * Vector2.down);
+    } 
     #endregion
 
     #region CHECK METHODS
