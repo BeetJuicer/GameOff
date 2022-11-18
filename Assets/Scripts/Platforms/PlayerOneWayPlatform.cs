@@ -29,7 +29,7 @@ public class PlayerOneWayPlatform : MonitoredBehaviour
 
     private void Update()
     {
-        if (playerMovement.NormInputY < 0)// && playerMovement.LastPressedJumpTime > 0)
+        if (playerMovement.NormInputY < 0)
         {
             if (currentOneWayPlatform != null)
             {

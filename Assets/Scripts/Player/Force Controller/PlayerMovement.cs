@@ -46,6 +46,7 @@ public class PlayerMovement : MonitoredBehaviour
 	public bool IsSliding { get; private set; }
 
 	//Timers (also all fields, could be private and a method returning a bool could be used)
+	[Monitor]
 	public float LastOnGroundTime { get; private set; }
 	public float LastOnWallTime { get; private set; }
 	public float LastOnWallRightTime { get; private set; }
@@ -89,6 +90,9 @@ public class PlayerMovement : MonitoredBehaviour
 	[SerializeField] private Transform _frontWallCheckPoint;
 	[SerializeField] private Transform _backWallCheckPoint;
 	[SerializeField] private Vector2 _wallCheckSize = new Vector2(0.5f, 1f);
+	Collider2D backWall;
+	Collider2D frontWall;
+
     #endregion
 
     #region LAYERS & TAGS
@@ -180,23 +184,52 @@ public class PlayerMovement : MonitoredBehaviour
 			//Ground Check
 			if (Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _groundLayer) && !IsJumping) //checks if set box overlaps with ground
 			{
-				if (LastOnGroundTime < -0.1f)
+                if (LastOnGroundTime < -0.1f)
+                {
+                    AnimHandler.justLanded = true;
+                }
+
+                // If the ground being detected by the overlap box is a one way platform
+                if (Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _groundLayer).gameObject.CompareTag("OneWayPlatform"))
 				{
-					AnimHandler.justLanded = true;
+					// The player is not standing still, which means it's not ON the platform
+					if (RB.velocity.y != 0)
+					{
+						LastOnGroundTime = 0;
+						return;
+					}
 				}
 
 				LastOnGroundTime = Data.coyoteTime; //if so sets the lastGrounded to coyoteTime
 			}
 
-			//Right Wall Check
-			if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)
-					|| (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)) && !IsWallJumping)
-				LastOnWallRightTime = Data.coyoteTime;
+			// Wall Check
+			frontWall = Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer);
+			backWall = Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer);
 
-			//Left Wall Check
-			if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)
-				|| (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)) && !IsWallJumping)
-				LastOnWallLeftTime = Data.coyoteTime;
+			// This means the player is inside a one-way platform
+			if (frontWall != null && frontWall.gameObject.CompareTag("OneWayPlatform")
+			|| backWall != null && backWall.gameObject.CompareTag("OneWayPlatform"))
+			{
+				LastOnWallLeftTime = 0;
+				LastOnWallRightTime = 0;
+			}
+			else
+			{
+				//Right Wall Check
+				if (((frontWall && IsFacingRight)
+					|| (backWall && !IsFacingRight)) && !IsWallJumping)
+				{
+					LastOnWallRightTime = Data.coyoteTime;
+				}
+
+				//Left Wall Check
+				if (((frontWall && !IsFacingRight)
+					|| (backWall && IsFacingRight)) && !IsWallJumping)
+				{
+					LastOnWallLeftTime = Data.coyoteTime;
+				}
+			}
 
 			//Two checks needed for both left and right walls since whenever the play turns the wall checkPoints swap sides
 			LastOnWallTime = Mathf.Max(LastOnWallLeftTime, LastOnWallRightTime);
@@ -235,7 +268,7 @@ public class PlayerMovement : MonitoredBehaviour
 		if (!IsDashing)
 		{
 			//Jump
-			if (CanJump() && LastPressedJumpTime > 0 && !isPassingThroughPlatform)
+			if (CanJump() && LastPressedJumpTime > 0)
 			{
 				IsJumping = true;
 				IsWallJumping = false;
@@ -595,7 +628,7 @@ public class PlayerMovement : MonitoredBehaviour
 
     private bool CanJump()
     {
-		return LastOnGroundTime > 0 && !IsJumping && !isPassingThroughPlatform;
+		return LastOnGroundTime > 0 && !IsJumping;
     }
 
 	private bool CanWallJump()

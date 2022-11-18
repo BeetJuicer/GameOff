@@ -135,4 +135,20 @@ public class MovingPlatform : MonoBehaviour
         Moving,
         Returning
     }
+
+    private void OnDrawGizmos()
+    {
+        if (Application.isPlaying)
+        {
+            Gizmos.DrawSphere(startPos, 0.25f);
+            Gizmos.DrawSphere(endPos, 0.25f);
+            Gizmos.DrawLine(startPos, endPos);
+        }
+        else
+        {
+            Gizmos.DrawSphere(transform.position, 0.25f);
+            Gizmos.DrawSphere(transform.position + (Vector3)relativeTargetPos, 0.25f);
+            Gizmos.DrawLine(transform.position, transform.position + (Vector3)relativeTargetPos);
+        }
+    }
 }
