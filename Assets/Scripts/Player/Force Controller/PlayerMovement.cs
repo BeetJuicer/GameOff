@@ -476,7 +476,7 @@ public class PlayerMovement : MonitoredBehaviour
     private void Run(float lerpAmount)
 	{
 		//Calculate the direction we want to move in and our desired velocity
-		float targetSpeed = _moveInput.x * Data.runMaxSpeed;
+		float targetSpeed = (IsGliding) ? _moveInput.x * Data.glideRunMaxSpeed : _moveInput.x * Data.runMaxSpeed;
 		//We can reduce our control using Lerp() this smooths changes to are direction and speed
 		targetSpeed = Mathf.Lerp(RB.velocity.x, targetSpeed, lerpAmount);
 
@@ -650,11 +650,10 @@ public class PlayerMovement : MonitoredBehaviour
 
 	private void Glide()
 	{
+		// Handles the downward force during gliding
         float speedDif = Data.glideDownwardSpeed - RB.velocity.y;
         float movement = speedDif * Data.glideAccel;
         movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime), Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime));
-
-		Debug.Log($"Force being applied in Glide(): {movement}");
 
         RB.AddForce(movement * Vector2.down);
     }
