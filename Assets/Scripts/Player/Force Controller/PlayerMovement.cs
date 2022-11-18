@@ -345,7 +345,7 @@ public class PlayerMovement : MonitoredBehaviour
 			// Set the minimum y velocity to be -5(temporary)
 
 			yVelocity = Mathf.Clamp(RB.velocity.y, -5, 0);
-			RB.velocity = new Vector2(RB.velocity.x, yVelocity);
+            RB.velocity = new Vector2(RB.velocity.x, yVelocity);
 
 			IsJumping = false;
             IsGliding = true;
@@ -375,7 +375,8 @@ public class PlayerMovement : MonitoredBehaviour
 			else if (IsGliding)
 			{
 				SetGravityScale(0);
-			}
+                RB.velocity = new Vector2(RB.velocity.x, Mathf.Max(RB.velocity.y, -Data.maxGlideFallSpeed));
+            }
 			else if (RB.velocity.y < 0 && _moveInput.y < 0)
 			{
 				//Much higher gravity if holding down
@@ -421,6 +422,8 @@ public class PlayerMovement : MonitoredBehaviour
 		{
 			if (IsWallJumping)
 				Run(Data.wallJumpRunLerp);
+			else if (IsGliding)
+				Run(Data.glideRunLerp);
 			else
 				Run(1);
 		}
@@ -640,20 +643,21 @@ public class PlayerMovement : MonitoredBehaviour
 		float movement = speedDif * Data.slideAccel;
 		//So, we clamp the movement here to prevent any over corrections (these aren't noticeable in the Run)
 		//The force applied can't be greater than the (negative) speedDifference * by how many times a second FixedUpdate() is called. For more info research how force are applied to rigidbodies.
-		movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif)  * (1 / Time.fixedDeltaTime), Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime));
+		movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif)  * (1 / Time.fixedDeltaTime), 0);
 
 		RB.AddForce(movement * Vector2.up);
 	}
 
 	private void Glide()
 	{
-        float speedDif = Data.glideSpeed - RB.velocity.y;
+        float speedDif = Data.glideDownwardSpeed - RB.velocity.y;
         float movement = speedDif * Data.glideAccel;
-        //Clamp movement between the speedDif and 0 to prevent positive values. ( Floating up )
-        movement = Mathf.Clamp(movement, 0, Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime));
+        movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime), Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime));
+
+		Debug.Log($"Force being applied in Glide(): {movement}");
 
         RB.AddForce(movement * Vector2.down);
-    } 
+    }
     #endregion
 
     #region CHECK METHODS

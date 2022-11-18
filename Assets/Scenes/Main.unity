@@ -598,10 +598,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.10894309
-    y: 0.10982659
-    width: 0.7804878
-    height: 0.7803468
+    x: 0.098497495
+    y: 0.09792285
+    width: 0.8013355
+    height: 0.8011869
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -3138,7 +3138,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6031069319557409661}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 868eb93d99f6f59498f3ee8a7e1d1f7d, type: 3}
   m_Name: 
