@@ -31,19 +31,21 @@ public class PlayerMovement : MonitoredBehaviour
 	//but can only be privately written to.
 	public bool IsFacingRight { get; private set; }
 
-//  [Monitor]
+    [Monitor]
     public bool IsRunning { get; private set; }
-//  [Monitor]
+    [Monitor]
     public bool IsJumping { get; private set; }
-//  [Monitor]
+    [Monitor]
     public bool IsWallJumping { get; private set; }
-//  [Monitor]
+    [Monitor]
     public bool IsDashing { get; private set; }
-//	[Monitor]
-	public bool IsSliding { get; private set; }
-
-	//Timers (also all fields, could be private and a method returning a bool could be used)
 	[Monitor]
+	public bool IsSliding { get; private set; }
+	[Monitor]
+    public bool IsGliding { get; private set; }
+
+    //Timers (also all fields, could be private and a method returning a bool could be used)
+    [Monitor]
 	public float LastOnGroundTime { get; private set; }
 	public float LastOnWallTime { get; private set; }
 	public float LastOnWallRightTime { get; private set; }
@@ -52,6 +54,8 @@ public class PlayerMovement : MonitoredBehaviour
 	//Jump
 	private bool _isJumpCut;
 	private bool _isJumpFalling;
+
+	//Platform
 	private bool isPassingThroughPlatform;
 
     //Wall Jump
@@ -75,6 +79,44 @@ public class PlayerMovement : MonitoredBehaviour
 	public int NormInputY { get; private set; }
     public float LastPressedJumpTime { get; private set; }
 	public float LastPressedDashTime { get; private set; }
+
+	//Temporary?
+	public bool jumpInputStop { get; private set; }
+	#endregion
+
+    #region INPUT EVENTS
+    public void OnMoveInput(InputAction.CallbackContext context)
+    {
+        _moveInput = context.ReadValue<Vector2>();
+
+        NormInputX = Mathf.RoundToInt(_moveInput.x);
+        NormInputY = Mathf.RoundToInt(_moveInput.y);
+    }
+
+    public void OnJumpInput(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+			//JumpInput
+            LastPressedJumpTime = Data.jumpInputBufferTime;
+			jumpInputStop = false;
+        }
+
+        if (context.canceled)
+        {
+			//JumpUpInput
+			jumpInputStop = true;
+            if (CanJumpCut() || CanWallJumpCut())
+                _isJumpCut = true;
+        }
+    }
+    public void OnDashInput(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            LastPressedDashTime = Data.dashInputBufferTime;
+        }
+    }
 	#endregion
 
 	#region CHECK PARAMETERS
@@ -98,7 +140,7 @@ public class PlayerMovement : MonitoredBehaviour
     #endregion
 
     #region MONITOR VARIABLES
-    //[Monitor]
+    [Monitor]
 	Vector2 currentVelocity = Vector2.zero;
     //[Monitor]
     float movement;
@@ -123,39 +165,6 @@ public class PlayerMovement : MonitoredBehaviour
 		SetGravityScale(Data.gravityScale);
 		IsFacingRight = true;
 	}
-
-    #region INPUT EVENTS
-    public void OnMoveInput(InputAction.CallbackContext context)
-    {
-        _moveInput = context.ReadValue<Vector2>();
-
-        NormInputX = Mathf.RoundToInt(_moveInput.x);
-        NormInputY = Mathf.RoundToInt(_moveInput.y);
-    }
-
-    public void OnJumpInput(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-			//JumpInput
-            LastPressedJumpTime = Data.jumpInputBufferTime;
-        }
-
-        if (context.canceled)
-        {
-			//JumpUpInput
-            if (CanJumpCut() || CanWallJumpCut())
-                _isJumpCut = true;
-        }
-    }
-    public void OnDashInput(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            LastPressedDashTime = Data.dashInputBufferTime;
-        }
-    }
-	#endregion
 
 	private void Update()
 	{
@@ -337,10 +346,20 @@ public class PlayerMovement : MonitoredBehaviour
         #endregion
 
         #region GLIDE CHECKS
+		if (CanGlide() && LastPressedJumpTime > 0 && !jumpInputStop)
+		{
+            IsGliding = true;
+            Glide();
+		}
 
+		if (jumpInputStop || LastOnGroundTime > 0 || LastOnWallTime > 0)
+		{
+			IsGliding = false;
+		}
         #endregion
 
         #region GRAVITY
+
         if (!_isDashAttacking)
 		{
 			//Higher gravity if we've released the jump input or are falling
@@ -352,6 +371,10 @@ public class PlayerMovement : MonitoredBehaviour
 					AssignNegativeVelocity();
 					shouldAssignNegative = false;
 				}
+				SetGravityScale(0);
+			}
+			else if (IsGliding)
+			{
 				SetGravityScale(0);
 			}
 			else if (RB.velocity.y < 0 && _moveInput.y < 0)
@@ -623,7 +646,8 @@ public class PlayerMovement : MonitoredBehaviour
 
 	private void Glide()
 	{
-		//TODO
+		// Apply a constant downward velocity
+		RB.AddForce(1 * Vector2.down);
 	}
     #endregion
 
@@ -637,6 +661,12 @@ public class PlayerMovement : MonitoredBehaviour
     private bool CanJump()
     {
 		return LastOnGroundTime > 0 && !IsJumping;
+    }
+
+	private bool CanGlide()
+	{
+		return LastOnGroundTime <= 0 && !IsJumping && LastOnWallTime <= 0;
+
     }
 
 	private bool CanWallJump()
