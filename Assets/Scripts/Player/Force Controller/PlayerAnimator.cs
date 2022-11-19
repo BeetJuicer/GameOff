@@ -57,8 +57,8 @@ public class PlayerAnimator : MonoBehaviour
 
         CheckAnimationState();
 
-        ParticleSystem.MainModule jumpPSettings = _jumpParticle.main;
-        ParticleSystem.MainModule landPSettings = _landParticle.main;
+//        ParticleSystem.MainModule jumpPSettings = _jumpParticle.main;
+//        ParticleSystem.MainModule landPSettings = _landParticle.main;
     }
 
     private void CheckAnimationState()

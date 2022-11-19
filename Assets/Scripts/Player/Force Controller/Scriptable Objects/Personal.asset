@@ -19,6 +19,7 @@ MonoBehaviour:
   fastFallGravityMult: 2
   maxFastFallSpeed: 30
   runMaxSpeed: 11
+  glideRunMaxSpeed: 8.5
   runAcceleration: 2.5
   runAccelAmount: 11.363636
   runDecceleration: 5
@@ -40,7 +41,7 @@ MonoBehaviour:
   doTurnOnWallJump: 0
   slideSpeed: -5
   slideAccel: 2
-  glideDownwardSpeed: 0
+  glideDownwardSpeed: 2
   glideAccel: 1
   glideRunLerp: 0.6
   maxGlideFallSpeed: 10

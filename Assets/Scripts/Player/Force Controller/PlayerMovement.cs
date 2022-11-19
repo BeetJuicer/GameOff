@@ -651,11 +651,13 @@ public class PlayerMovement : MonitoredBehaviour
 	private void Glide()
 	{
 		// Handles the downward force during gliding
-        float speedDif = Data.glideDownwardSpeed - RB.velocity.y;
+        float speedDif = RB.velocity.y - Data.glideDownwardSpeed;
         float movement = speedDif * Data.glideAccel;
-        movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime), Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime));
+        movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime), 0);
+        //movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime), Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime));
 
-        RB.AddForce(movement * Vector2.down);
+        RB.AddForce(movement * Vector2.up);
+		Debug.Log($"{movement * Vector2.up} {speedDif * Data.glideAccel}");
     }
     #endregion
 
