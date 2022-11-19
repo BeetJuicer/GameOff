@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class TestPush : MonoBehaviour
 {
+
     private Transform source;
     private Transform target;
 
@@ -13,6 +14,8 @@ public class TestPush : MonoBehaviour
 
     [SerializeField]
     private float pushForce = 20f;
+
+    Vector2 direction;
 
     private void Start()
     {
@@ -24,6 +27,8 @@ public class TestPush : MonoBehaviour
 
         source = gameObject.transform.Find("Source");
         target = gameObject.transform.Find("Target");
+
+        GetPushDirection();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -36,7 +41,10 @@ public class TestPush : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        collision.GetComponent<Rigidbody2D>().AddForce(pushForce * GetPushDirection(), ForceMode2D.Force);
+        if (collision.CompareTag("Player") && collision.GetComponent<PlayerMovement>().IsGliding)
+        {
+            collision.GetComponent<Rigidbody2D>().AddForce(pushForce * direction, ForceMode2D.Force);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -47,10 +55,8 @@ public class TestPush : MonoBehaviour
         }
     }
 
-    private Vector2 GetPushDirection()
+    private void GetPushDirection()
     {
-        Vector2 direction;
-
         if (source.position.y == target.position.y)
         {
             direction.y = 0;
@@ -68,7 +74,5 @@ public class TestPush : MonoBehaviour
         {
             direction.x = 1 * Mathf.Sign(target.position.x - source.position.x);
         }
-
-        return direction;
     }
 }

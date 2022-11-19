@@ -20,6 +20,7 @@ public class PlayerMovement : MonitoredBehaviour
 
 	#region COMPONENTS
     public Rigidbody2D RB { get; private set; }
+	public BoxCollider2D playerCollider { get; private set; }
 	//Script to handle all player animations, all references can be safely removed if you're importing into your own project.
 	public PlayerAnimator AnimHandler { get; private set; }
 	public PlayerOneWayPlatform PlatformHandler { get; private set; }
@@ -50,6 +51,7 @@ public class PlayerMovement : MonitoredBehaviour
 	public float LastOnWallTime { get; private set; }
 	public float LastOnWallRightTime { get; private set; }
 	public float LastOnWallLeftTime { get; private set; }
+	public float LastOnWindTime { get; private set; }
 
 	//Jump
 	private bool _isJumpCut;
@@ -70,6 +72,12 @@ public class PlayerMovement : MonitoredBehaviour
 
     //Slide
     private bool shouldAssignNegative;
+
+	//Glide
+	[Monitor]
+	private bool isOnWind;
+	private bool justExitedWind;
+    private bool shouldClampYVelo;
 
     #endregion
 
@@ -137,6 +145,7 @@ public class PlayerMovement : MonitoredBehaviour
     #region LAYERS & TAGS
     [Header("Layers & Tags")]
 	[SerializeField] private LayerMask _groundLayer;
+	[SerializeField] private LayerMask _windLayer;
     #endregion
 
     #region MONITOR VARIABLES
@@ -153,6 +162,7 @@ public class PlayerMovement : MonitoredBehaviour
 		RB = GetComponent<Rigidbody2D>();
 		AnimHandler = GetComponent<PlayerAnimator>();
 		PlatformHandler = GetComponent<PlayerOneWayPlatform>();
+		playerCollider = GetComponent<BoxCollider2D>();
 	}
 
 	protected override void OnDestroy()
@@ -178,6 +188,7 @@ public class PlayerMovement : MonitoredBehaviour
 		LastOnWallTime -= Time.deltaTime;
 		LastOnWallRightTime -= Time.deltaTime;
 		LastOnWallLeftTime -= Time.deltaTime;
+		LastOnWindTime -= Time.deltaTime;
 
 		LastPressedJumpTime -= Time.deltaTime;
 		LastPressedDashTime -= Time.deltaTime;
@@ -191,6 +202,9 @@ public class PlayerMovement : MonitoredBehaviour
 		#endregion
 
 		#region COLLISION CHECKS
+
+		isOnWind = Physics2D.OverlapBox(transform.position, playerCollider.size, 0, _windLayer);
+
 		if (!IsDashing && !IsJumping)
 		{
 			//Ground Check
@@ -326,26 +340,51 @@ public class PlayerMovement : MonitoredBehaviour
 
         #region SLIDE CHECKS
 
-        if (!IsSliding && CanSlide() && ((LastOnWallLeftTime > 0 && _moveInput.x < 0) || (LastOnWallRightTime > 0 && _moveInput.x > 0))) 
+        if (!IsSliding && CanSlide() && ((LastOnWallLeftTime > 0 && _moveInput.x < 0) || (LastOnWallRightTime > 0 && _moveInput.x > 0)))
 		{
-            // Check so that a negative velocity is only assignedonce the sliding state is entered.
+            // Check so that a negative velocity is only assigned once the sliding state is entered.
             shouldAssignNegative = true;
+        }
+
+        if (CanSlide() && ((LastOnWallLeftTime > 0 && _moveInput.x < 0) || (LastOnWallRightTime > 0 && _moveInput.x > 0))) 
+		{
             IsSliding = true;
 		}
 		else
 		{
 			IsSliding = false;
         }
-        #endregion
+		#endregion
 
-        #region GLIDE CHECKS
+		#region GLIDE CHECKS
+
+		//TODO: clean dis
+		// When the player exits a wind field, clamp yVelo again
+		if(!isOnWind && IsGliding)
+		{
+			if (Time.time > LastOnWindTime && shouldClampYVelo)
+			{
+				if (RB.velocity.y <= 0)
+				{
+					RB.velocity = new Vector2(RB.velocity.x, RB.velocity.y / 10);
+				}
+				else
+				{
+                    RB.velocity = new Vector2(RB.velocity.x, 0);
+                }
+				shouldClampYVelo = false;
+            }
+		}
+
+		if (isOnWind)
+		{
+			LastOnWindTime = Time.time;
+			shouldClampYVelo = true;
+		}
+
 		if (!IsGliding && CanGlide() && LastPressedJumpTime > 0 && !jumpInputStop)
 		{
-			float yVelocity;
-			// Set the minimum y velocity to be -5(temporary)
-
-			yVelocity = Mathf.Clamp(RB.velocity.y, -5, 0);
-            RB.velocity = new Vector2(RB.velocity.x, yVelocity);
+            RB.velocity = new Vector2(RB.velocity.x, RB.velocity.y / 10);
 
 			IsJumping = false;
             IsGliding = true;
@@ -375,7 +414,18 @@ public class PlayerMovement : MonitoredBehaviour
 			else if (IsGliding)
 			{
 				SetGravityScale(0);
-                RB.velocity = new Vector2(RB.velocity.x, Mathf.Max(RB.velocity.y, -Data.maxGlideFallSpeed));
+				//Set the maximum upward velocity during winds
+				//TODO: Clean.
+				if (isOnWind)
+				{
+					RB.velocity = new Vector2(RB.velocity.x, Mathf.Min(RB.velocity.y, Data.maxGlideRiseSpeed));
+	                RB.velocity = new Vector2(RB.velocity.x, Mathf.Max(RB.velocity.y, -Data.maxGlideFallSpeed));
+				}
+				else
+				{
+                    RB.velocity = new Vector2(RB.velocity.x, Mathf.Min(RB.velocity.y, 0));
+                    RB.velocity = new Vector2(RB.velocity.x, Mathf.Max(RB.velocity.y, -Data.maxGlideFallSpeed));
+                }
             }
 			else if (RB.velocity.y < 0 && _moveInput.y < 0)
 			{
@@ -415,14 +465,15 @@ public class PlayerMovement : MonitoredBehaviour
 		#endregion
     }
 
-    private void FixedUpdate()
+	private void FixedUpdate()
 	{
 		//Handle Run
 		if (!IsDashing)
 		{
 			if (IsWallJumping)
 				Run(Data.wallJumpRunLerp);
-			else if (IsGliding)
+			else if (IsGliding && !isOnWind)
+				//When gliding but on wind, 1 will be used as the lerp. This gives the player more control when riding winds.
 				Run(Data.glideRunLerp);
 			else
 				Run(1);
@@ -652,12 +703,10 @@ public class PlayerMovement : MonitoredBehaviour
 	{
 		// Handles the downward force during gliding
         float speedDif = RB.velocity.y - Data.glideDownwardSpeed;
-        float movement = speedDif * Data.glideAccel;
+        float movement = speedDif * Data.glideDownwardAccel;
         movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime), 0);
-        //movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime), Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime));
 
-        RB.AddForce(movement * Vector2.up);
-		Debug.Log($"{movement * Vector2.up} {speedDif * Data.glideAccel}");
+        RB.AddForce(speedDif * Vector2.up);
     }
     #endregion
 
