@@ -43,7 +43,7 @@ public class TestPush : MonoBehaviour
     {
         if (collision.CompareTag("Player") && collision.GetComponent<PlayerMovement>().IsGliding)
         {
-            collision.GetComponent<Rigidbody2D>().AddForce(pushForce * direction, ForceMode2D.Force);
+            //collision.GetComponent<Rigidbody2D>().AddForce(pushForce * direction, ForceMode2D.Force);
         }
     }
 
