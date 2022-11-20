@@ -598,8 +598,8 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.10894309
-    y: 0.10982659
+    x: 0.1300813
+    y: 0.3034682
     width: 0.7804878
     height: 0.7803468
   near clip plane: 0.3
@@ -2207,9 +2207,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   momentumForce: 0
   momentumBufferTime: 0
-  relativeTargetPos: {x: 0, y: 20}
+  relativeTargetPos: {x: 0, y: 40}
   moveSpeed: 1
-  returnSpeed: 1
+  returnSpeed: 0.1
   reachedTargetTheshold: 0.5
   minIdleTime: 1
   playerTag: Player

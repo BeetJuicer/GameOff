@@ -20,10 +20,10 @@ MonoBehaviour:
   maxFastFallSpeed: 30
   runMaxSpeed: 11
   glideRunMaxSpeed: 8.5
-  runAcceleration: 2.5
-  runAccelAmount: 11.363636
-  runDecceleration: 5
-  runDeccelAmount: 22.727272
+  runAcceleration: 11
+  runAccelAmount: 50
+  runDecceleration: 2
+  runDeccelAmount: 9.090909
   accelInAir: 0.65
   deccelInAir: 0.65
   doConserveMomentum: 1
@@ -40,12 +40,12 @@ MonoBehaviour:
   wallJumpTime: 0.15
   doTurnOnWallJump: 0
   slideSpeed: -5
-  slideAccel: 0.8
-  glideDownwardSpeed: 2
-  glideDownwardAccel: 1
+  slideAccel: 3
   glideRunLerp: 0.8
-  maxGlideFallSpeed: 10
+  glideMaxFallSpeed: 8
+  glideYAxisAcceleration: 8
   maxGlideRiseSpeed: 5
+  glideYAxisAccelAmount: 50
   coyoteTime: 0.1
   jumpInputBufferTime: 0.1
   dashAmount: 1

@@ -2207,9 +2207,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   momentumForce: 0
   momentumBufferTime: 0
-  relativeTargetPos: {x: 0, y: 20}
+  relativeTargetPos: {x: 0, y: 40}
   moveSpeed: 1
-  returnSpeed: 1
+  returnSpeed: 0.1
   reachedTargetTheshold: 0.5
   minIdleTime: 1
   playerTag: Player

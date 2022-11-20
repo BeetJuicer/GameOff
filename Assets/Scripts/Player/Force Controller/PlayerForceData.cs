@@ -59,10 +59,11 @@ public class PlayerForceData : ScriptableObject
 	public float slideAccel;
 
 	[Header("Glide")]
-	public float glideDownwardAccel;
 	[Range(0f, 1f)] public float glideRunLerp;
-	public float maxGlideFallSpeed;
+	public float glideMaxFallSpeed;
+	public float glideYAxisAcceleration;
 	public float maxGlideRiseSpeed;
+	[HideInInspector] public float glideYAxisAccelAmount;
 
     [Header("Assists")]
 	[Range(0.01f, 0.5f)] public float coyoteTime; //Grace period after falling off a platform, where you can still jump
@@ -89,6 +90,12 @@ public class PlayerForceData : ScriptableObject
 	//Unity Callback, called when the inspector updates
     private void OnValidate()
     {
+		#region Variable Ranges
+		runAcceleration = Mathf.Clamp(runAcceleration, 0.01f, runMaxSpeed);
+		runDecceleration = Mathf.Clamp(runDecceleration, 0.01f, runMaxSpeed);
+		glideYAxisAcceleration = Mathf.Clamp(glideYAxisAcceleration, 0.01f, glideMaxFallSpeed);
+		#endregion
+
 		//Calculate gravity strength using the formula (gravity = 2 * jumpHeight / timeToJumpApex^2) 
 		gravityStrength = -(2 * jumpHeight) / (jumpTimeToApex * jumpTimeToApex);
 		
@@ -99,12 +106,10 @@ public class PlayerForceData : ScriptableObject
 		runAccelAmount = (50 * runAcceleration) / runMaxSpeed;
 		runDeccelAmount = (50 * runDecceleration) / runMaxSpeed;
 
+		glideYAxisAccelAmount = (50 * glideYAxisAcceleration) / glideMaxFallSpeed;
+
 		//Calculate jumpForce using the formula (initialJumpVelocity = gravity * timeToJumpApex)
 		jumpForce = Mathf.Abs(gravityStrength) * jumpTimeToApex;
 
-		#region Variable Ranges
-		runAcceleration = Mathf.Clamp(runAcceleration, 0.01f, runMaxSpeed);
-		runDecceleration = Mathf.Clamp(runDecceleration, 0.01f, runMaxSpeed);
-		#endregion
 	}
 }

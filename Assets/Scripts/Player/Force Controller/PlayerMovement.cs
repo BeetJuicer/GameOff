@@ -179,7 +179,6 @@ public class PlayerMovement : MonitoredBehaviour
 	private void Update()
 	{
         #region MONITORED
-        currentVelocity = RB.velocity;
         IsRunning = (NormInputX != 0 && LastOnGroundTime > 0);
 		#endregion
 
@@ -354,31 +353,11 @@ public class PlayerMovement : MonitoredBehaviour
 		{
 			IsSliding = false;
         }
-		#endregion
+        #endregion
 
-		#region GLIDE CHECKS
+        #region GLIDE CHECKS
 
-		//TODO: clean dis
-		// When the player exits a wind field, clamp yVelo again
-		
-		/* -- Commented out for testing.
-		if(!isOnWind && IsGliding)
-		{
-			if (Time.time > LastOnWindTime && shouldClampYVelo)
-			{
-				if (RB.velocity.y <= 0)
-				{
-					RB.velocity = new Vector2(RB.velocity.x, RB.velocity.y / 10);
-				}
-				else
-				{
-                    RB.velocity = new Vector2(RB.velocity.x, 0);
-                }
-				shouldClampYVelo = false;
-            }
-		}*/
-
-		if (isOnWind)
+        if (isOnWind)
 		{
 			LastOnWindTime = Time.time;
 			shouldClampYVelo = true;
@@ -386,8 +365,6 @@ public class PlayerMovement : MonitoredBehaviour
 
 		if (!IsGliding && CanGlide() && LastPressedJumpTime > 0 && !jumpInputStop)
 		{
-		//--Commented out for testing.
-            //RB.velocity = new Vector2(RB.velocity.x, RB.velocity.y / 10);
 			IsJumping = false;
             IsGliding = true;
 		}
@@ -402,10 +379,9 @@ public class PlayerMovement : MonitoredBehaviour
 
         if (!_isDashAttacking)
 		{
-			//Higher gravity if we've released the jump input or are falling
 			if (IsSliding)
 			{
-				//Assign a negative velocity when sliding, remove if an upward slide is needed.
+				//Assign a negative velocity when sliding, remove if an upward slide is needed. Or fix Slide, but no time.
 				if (shouldAssignNegative)
 				{
 					AssignNegativeVelocity();
@@ -413,23 +389,6 @@ public class PlayerMovement : MonitoredBehaviour
 				}
 				SetGravityScale(0);
 			}
-			else if (IsGliding)
-			{
-				SetGravityScale(0);
-				//Set the maximum upward velocity during winds
-				// Commented out. Test winds and gliding tomorrow. Might still need the max glide speed, depending on how effectors work.
-				/*--
-				if (isOnWind)
-				{
-					RB.velocity = new Vector2(RB.velocity.x, Mathf.Min(RB.velocity.y, Data.maxGlideRiseSpeed));
-	                RB.velocity = new Vector2(RB.velocity.x, Mathf.Max(RB.velocity.y, -Data.maxGlideFallSpeed));
-				}
-				else
-				{
-                    RB.velocity = new Vector2(RB.velocity.x, Mathf.Min(RB.velocity.y, 0));
-                    RB.velocity = new Vector2(RB.velocity.x, Mathf.Max(RB.velocity.y, -Data.maxGlideFallSpeed));
-                }*/
-            }
 			else if (RB.velocity.y < 0 && _moveInput.y < 0)
 			{
 				//Much higher gravity if holding down
@@ -470,8 +429,8 @@ public class PlayerMovement : MonitoredBehaviour
 
 	private void FixedUpdate()
 	{
-		//Handle Run
-		if (!IsDashing)
+        //Handle Run
+        if (!IsDashing)
 		{
 			if (IsWallJumping)
 				Run(Data.wallJumpRunLerp);
@@ -489,9 +448,14 @@ public class PlayerMovement : MonitoredBehaviour
 		//Handle Slide
 		if (IsSliding)
 			Slide();
+
 		//Handle Glide
 		if (IsGliding)
+		{
 			Glide();
+		}
+
+        currentVelocity = RB.velocity;
     }
 
     #region GENERAL METHODS
@@ -571,12 +535,7 @@ public class PlayerMovement : MonitoredBehaviour
 
 		//Convert this to a vector and apply to rigidbody
 		RB.AddForce(movement * Vector2.right, ForceMode2D.Force);
-
-		/*
-		 * For those interested here is what AddForce() will do
-		 * RB.velocity = new Vector2(RB.velocity.x + (Time.fixedDeltaTime  * speedDif * accelRate) / RB.mass, RB.velocity.y);
-		 * Time.fixedDeltaTime is by default in Unity 0.02 seconds equal to 50 FixedUpdate() calls per second
-		*/
+  
 	}
 
 	private void Turn()
@@ -704,20 +663,23 @@ public class PlayerMovement : MonitoredBehaviour
 
 	private void Glide()
 	{
-	//Goal : If the current y Velocity is negative but above the max fall speed, glide will apply enough downward force to take it to the glide max fall speed
-    //	 If it's positive, same thing.
-    //	 However, if the current fall speed is below the max glide speed, this function will apply an upward force to take it back up to the maxFallSpeed
-    //I put a negative sign for maxFallSpeed here because I put a positive value in the inspector. Maybe consider only allowing negative values in the inspector?
-    float speedDif = -Data.maxGlideFallSpeed - RB.velocity.y;
-	// Multiply the speedDif by the acceleration rate.
-	float movement = speedDif * Data.glideDownwardAccel;
-	// Clamp the movement. I still don't understand this part.
-	movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif)  * (1 / Time.fixedDeltaTime), Mathf.Abs(speedDif)  * (1 / Time.fixedDeltaTime) );
-	
-	//Apply the force.
-	RB.AddForce(movement * Vector2.up); // According to paper simulation, this is right. If problems occur, it might be the other things I slapped on.
-	
-    }
+		float targetSpeed = -Data.glideMaxFallSpeed;
+
+        //	If the current y Velocity is negative but above the max fall speed or positive, glide will apply enough downward force to take it to the glide max fall speed
+        //	However, if the current fall speed is below the max glide speed, this function will apply an upward force to take it back up to the maxFallSpeed
+        float speedDif = targetSpeed - RB.velocity.y;
+
+		// Multiply the speedDif by the acceleration rate.
+		float movement = speedDif * Data.glideYAxisAccelAmount;
+		//Problem: Changing the acceleration amount doesn't perform the way I want.
+		//			It doesn't stop at the desired velocity.
+
+		// Clamp the movement. 
+		movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime), Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime));
+
+		//Apply the force.
+		RB.AddForce(movement * Vector2.up);
+	}
     #endregion
 
     #region CHECK METHODS
