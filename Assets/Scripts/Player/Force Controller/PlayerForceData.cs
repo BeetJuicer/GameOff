@@ -59,7 +59,6 @@ public class PlayerForceData : ScriptableObject
 	public float slideAccel;
 
 	[Header("Glide")]
-	public float glideDownwardSpeed;
 	public float glideDownwardAccel;
 	[Range(0f, 1f)] public float glideRunLerp;
 	public float maxGlideFallSpeed;
