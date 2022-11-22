@@ -42,9 +42,9 @@ MonoBehaviour:
   slideSpeed: -5
   slideAccel: 3
   glideRunLerp: 0.8
-  glideMaxFallSpeed: 8
-  glideYAxisAcceleration: 8
-  maxGlideRiseSpeed: 5
+  glideMaxFallSpeed: 1
+  glideYAxisAcceleration: 1
+  lift: 100
   glideYAxisAccelAmount: 50
   coyoteTime: 0.1
   jumpInputBufferTime: 0.1

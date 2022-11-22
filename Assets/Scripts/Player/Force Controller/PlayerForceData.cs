@@ -61,8 +61,8 @@ public class PlayerForceData : ScriptableObject
 	[Header("Glide")]
 	[Range(0f, 1f)] public float glideRunLerp;
 	public float glideMaxFallSpeed;
-	public float glideYAxisAcceleration;
-	public float maxGlideRiseSpeed;
+    [HideInInspector] public float glideYAxisAcceleration;//hide for now
+	public float lift;
 	[HideInInspector] public float glideYAxisAccelAmount;
 
     [Header("Assists")]
@@ -106,6 +106,7 @@ public class PlayerForceData : ScriptableObject
 		runAccelAmount = (50 * runAcceleration) / runMaxSpeed;
 		runDeccelAmount = (50 * runDecceleration) / runMaxSpeed;
 
+		glideYAxisAcceleration = glideMaxFallSpeed;//temp
 		glideYAxisAccelAmount = (50 * glideYAxisAcceleration) / glideMaxFallSpeed;
 
 		//Calculate jumpForce using the formula (initialJumpVelocity = gravity * timeToJumpApex)

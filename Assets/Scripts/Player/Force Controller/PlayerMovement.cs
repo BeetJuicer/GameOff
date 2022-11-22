@@ -76,8 +76,6 @@ public class PlayerMovement : MonitoredBehaviour
 	//Glide
 	[Monitor]
 	private bool isOnWind;
-	private bool justExitedWind;
-    private bool shouldClampYVelo;
 
     #endregion
 
@@ -338,13 +336,6 @@ public class PlayerMovement : MonitoredBehaviour
         #endregion
 
         #region SLIDE CHECKS
-
-        if (!IsSliding && CanSlide() && ((LastOnWallLeftTime > 0 && _moveInput.x < 0) || (LastOnWallRightTime > 0 && _moveInput.x > 0)))
-		{
-            // Check so that a negative velocity is only assigned once the sliding state is entered.
-            shouldAssignNegative = true;
-        }
-
         if (CanSlide() && ((LastOnWallLeftTime > 0 && _moveInput.x < 0) || (LastOnWallRightTime > 0 && _moveInput.x > 0))) 
 		{
             IsSliding = true;
@@ -356,12 +347,6 @@ public class PlayerMovement : MonitoredBehaviour
         #endregion
 
         #region GLIDE CHECKS
-
-        if (isOnWind)
-		{
-			LastOnWindTime = Time.time;
-			shouldClampYVelo = true;
-		}
 
 		if (!IsGliding && CanGlide() && LastPressedJumpTime > 0 && !jumpInputStop)
 		{
@@ -381,12 +366,6 @@ public class PlayerMovement : MonitoredBehaviour
 		{
 			if (IsSliding)
 			{
-				//Assign a negative velocity when sliding, remove if an upward slide is needed. Or fix Slide, but no time.
-				if (shouldAssignNegative)
-				{
-					AssignNegativeVelocity();
-					shouldAssignNegative = false;
-				}
 				SetGravityScale(0);
 			}
 			else if (RB.velocity.y < 0 && _moveInput.y < 0)
@@ -446,7 +425,7 @@ public class PlayerMovement : MonitoredBehaviour
 		}
 
 		//Handle Slide
-		if (IsSliding)
+		if (IsSliding && RB.velocity.y < 0.01f)
 			Slide();
 
 		//Handle Glide
@@ -656,34 +635,37 @@ public class PlayerMovement : MonitoredBehaviour
 		float movement = speedDif * Data.slideAccel;
 		//So, we clamp the movement here to prevent any over corrections (these aren't noticeable in the Run)
 		//The force applied can't be greater than the (negative) speedDifference * by how many times a second FixedUpdate() is called. For more info research how force are applied to rigidbodies.
-		movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif)  * (1 / Time.fixedDeltaTime), 0);
+		movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif)  * (1 / Time.fixedDeltaTime), Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime));
 
 		RB.AddForce(movement * Vector2.up);
 	}
 
 	private void Glide()
 	{
+		//TODO: set gravity scale lower, but not 0?
+
 		float targetSpeed = -Data.glideMaxFallSpeed;
 
-        //	If the current y Velocity is negative but above the max fall speed or positive, glide will apply enough downward force to take it to the glide max fall speed
-        //	However, if the current fall speed is below the max glide speed, this function will apply an upward force to take it back up to the maxFallSpeed
-        float speedDif = targetSpeed - RB.velocity.y;
+		//If the current fall speed is below the max glide speed, apply an upward force to take it back up to the max glide FallSpeed
 
-		// Multiply the speedDif by the acceleration rate.
-		float movement = speedDif * Data.glideYAxisAccelAmount;
-		//Problem: Changing the acceleration amount doesn't perform the way I want.
-		//			It doesn't stop at the desired velocity.
+		if (RB.velocity.y < Data.glideMaxFallSpeed)
+		{
+			float speedDif = targetSpeed - RB.velocity.y;
 
-		// Clamp the movement. 
-		movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime), Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime));
+			// Multiply the speedDif by the acceleration rate.
+			float movement = speedDif * Data.glideYAxisAccelAmount;
 
-		//Apply the force.
-		RB.AddForce(movement * Vector2.up);
+			// Clamp the movement. 
+			movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime), Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime));
+
+			//Apply the force.
+			RB.AddForce(movement * Vector2.up);
+		}
 	}
-    #endregion
+	#endregion
 
-    #region CHECK METHODS
-    public void CheckDirectionToFace(bool isMovingRight)
+	#region CHECK METHODS
+	public void CheckDirectionToFace(bool isMovingRight)
 	{
 		if (isMovingRight != IsFacingRight)
 			Turn();

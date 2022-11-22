@@ -3,19 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(AreaEffector2D))]
 public class TestPush : MonoBehaviour
 {
-
-    private Transform source;
-    private Transform target;
-
     private SpriteRenderer spriteRenderer;
     private Color origColor;
 
     [SerializeField]
     private float pushForce = 20f;
-
-    Vector2 direction;
 
     private void Start()
     {
@@ -24,11 +19,6 @@ public class TestPush : MonoBehaviour
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         origColor = spriteRenderer.color;
-
-        source = gameObject.transform.Find("Source");
-        target = gameObject.transform.Find("Target");
-
-        GetPushDirection();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -36,14 +26,6 @@ public class TestPush : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             spriteRenderer.color = Color.green;
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player") && collision.GetComponent<PlayerMovement>().IsGliding)
-        {
-            //collision.GetComponent<Rigidbody2D>().AddForce(pushForce * direction, ForceMode2D.Force);
         }
     }
 
@@ -55,24 +37,12 @@ public class TestPush : MonoBehaviour
         }
     }
 
-    private void GetPushDirection()
+    private void OnDrawGizmos()
     {
-        if (source.position.y == target.position.y)
-        {
-            direction.y = 0;
-        }
-        else
-        {
-            direction.y = 1 * Mathf.Sign(target.position.y - source.position.y);
-        }
+        Gizmos.color = Color.red;
 
-        if (source.position.x == target.position.x)
-        {
-            direction.x = 0;
-        }
-        else
-        {
-            direction.x = 1 * Mathf.Sign(target.position.x - source.position.x);
-        }
+        Vector2 dir = (Vector2)(Quaternion.Euler(0, 0, GetComponent<AreaEffector2D>().forceAngle) * Vector2.right);
+
+        DrawArrow.ForGizmo(transform.position, dir * 10f, 1f);
     }
 }
