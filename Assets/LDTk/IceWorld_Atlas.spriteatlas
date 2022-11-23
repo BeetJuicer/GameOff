@@ -54,6 +54,7 @@ SpriteAtlas:
     - {fileID: 2702985212887769108, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
     - {fileID: 2705012260097542653, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
     - {fileID: -8628734611252528171, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
+    - {fileID: -8873123827042650049, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
     - {fileID: -2561291544544907666, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
     - {fileID: 7523972344347694456, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
     bindAsDefault: 1
@@ -67,6 +68,7 @@ SpriteAtlas:
   - {fileID: 7756958629790530571, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
   - {fileID: 7246396034047509056, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
   - {fileID: 7899872008009386792, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
+  - {fileID: -8873123827042650049, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
   - {fileID: 7523972344347694456, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
   - {fileID: -2561291544544907666, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
   - {fileID: 2702985212887769108, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
@@ -80,6 +82,7 @@ SpriteAtlas:
   - Blocks (16 x 16)_144_64_16_16
   - Blocks (16 x 16)_128_16_16_16
   - Blocks (16 x 16)_0_32_16_16
+  - Terrain (16 x 16)_144_16_16_16
   - Terrain (16 x 16)_160_96_16_16
   - Terrain (16 x 16)_144_96_16_16
   - Terrain (16 x 16)_64_128_16_16

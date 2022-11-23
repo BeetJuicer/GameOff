@@ -21,6 +21,8 @@ ScriptedImporter:
   _intGridValues:
   - _key: World_1
     _asset: {fileID: 11400000, guid: aa9921393bd745d4aad8027b19b09d94, type: 2}
+  - _key: World_2
+    _asset: {fileID: 11400000, guid: 36df44fbccab6a84e88ac0d872e169d2, type: 2}
   _entities: []
   _enumGenerate: 0
   _enumPath: 
