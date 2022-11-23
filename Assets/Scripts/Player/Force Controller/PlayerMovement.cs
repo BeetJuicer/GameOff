@@ -336,7 +336,7 @@ public class PlayerMovement : MonitoredBehaviour
         #endregion
 
         #region SLIDE CHECKS
-        if (CanSlide() && ((LastOnWallLeftTime > 0 && _moveInput.x < 0) || (LastOnWallRightTime > 0 && _moveInput.x > 0))) 
+        if (CanSlide() && RB.velocity.y < 0.01f && ((LastOnWallLeftTime > 0 && _moveInput.x < 0) || (LastOnWallRightTime > 0 && _moveInput.x > 0))) 
 		{
             IsSliding = true;
 		}
@@ -425,7 +425,7 @@ public class PlayerMovement : MonitoredBehaviour
 		}
 
 		//Handle Slide
-		if (IsSliding && RB.velocity.y < 0.01f)
+		if (IsSliding)
 			Slide();
 
 		//Handle Glide
