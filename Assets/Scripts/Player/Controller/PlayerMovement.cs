@@ -73,9 +73,14 @@ public class PlayerMovement : MonitoredBehaviour
     //Slide
     private bool shouldAssignNegative;
 
-	//Glide
+	// Collision Checks
 	[Monitor]
 	private bool isOnWind;
+	private bool isOnIce;
+	// Some of the collision checks are gameObjects, so that we can check for the tags in case of one-way platforms
+	private GameObject isOnGround;
+	private GameObject frontWall;
+	private GameObject backWall;
 
     #endregion
 
@@ -135,8 +140,6 @@ public class PlayerMovement : MonitoredBehaviour
 	[SerializeField] private Transform _frontWallCheckPoint;
 	[SerializeField] private Transform _backWallCheckPoint;
 	[SerializeField] private Vector2 _wallCheckSize = new Vector2(0.5f, 1f);
-	Collider2D backWall;
-	Collider2D frontWall;
 
     #endregion
 
@@ -144,6 +147,7 @@ public class PlayerMovement : MonitoredBehaviour
     [Header("Layers & Tags")]
 	[SerializeField] private LayerMask _groundLayer;
 	[SerializeField] private LayerMask _windLayer;
+	[SerializeField] private LayerMask _iceLayer;
     #endregion
 
     #region MONITOR VARIABLES
@@ -201,19 +205,21 @@ public class PlayerMovement : MonitoredBehaviour
 		#region COLLISION CHECKS
 
 		isOnWind = Physics2D.OverlapBox(transform.position, playerCollider.size, 0, _windLayer);
+		isOnIce = Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _iceLayer);
+		isOnGround = Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _groundLayer).gameObject;
 
-		if (!IsDashing && !IsJumping)
+        if (!IsDashing && !IsJumping)
 		{
-			//Ground Check
-			if (Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _groundLayer) && !IsJumping) //checks if set box overlaps with ground
+			//Ground Check - if on groundlayer or ice layer and not jumping.
+			if ((isOnIce || isOnGround) && !IsJumping) //checks if set box overlaps with ground
 			{
                 if (LastOnGroundTime < -0.1f)
                 {
                     AnimHandler.justLanded = true;
                 }
 
-                // If the ground being detected by the overlap box is a one way platform
-                if (Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _groundLayer).gameObject.CompareTag("OneWayPlatform"))
+                // isOnGround is a gameObject, so we can check if the tag is oneWayPlatform
+                if (isOnGround.CompareTag("OneWayPlatform"))
 				{
 					// The player is not standing still, which means it's not ON the platform
 					if (RB.velocity.y != 0)
@@ -223,38 +229,37 @@ public class PlayerMovement : MonitoredBehaviour
 					}
 				}
 
-				LastOnGroundTime = Data.coyoteTime; //if so sets the lastGrounded to coyoteTime
+                //if so set the lastGrounded to coyoteTime
+                LastOnGroundTime = Data.coyoteTime; 
 			}
 
 			// Wall Check
-			frontWall = Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer);
-			backWall = Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer);
+			frontWall = Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer).gameObject;
+			backWall = Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer).gameObject;
 
 			// This means the player is inside a one-way platform
-			if (frontWall != null && frontWall.gameObject.CompareTag("OneWayPlatform")
-			|| backWall != null && backWall.gameObject.CompareTag("OneWayPlatform"))
+			if (frontWall != null && frontWall.CompareTag("OneWayPlatform")
+			|| backWall != null && backWall.CompareTag("OneWayPlatform"))
 			{
 				LastOnWallLeftTime = 0;
 				LastOnWallRightTime = 0;
 			}
-			else
+			else if (!IsWallJumping)
 			{
 				//Right Wall Check
-				if (((frontWall && IsFacingRight)
-					|| (backWall && !IsFacingRight)) && !IsWallJumping)
+				if ((frontWall && IsFacingRight) || (backWall && !IsFacingRight))
 				{
 					LastOnWallRightTime = Data.coyoteTime;
 				}
 
 				//Left Wall Check
-				if (((frontWall && !IsFacingRight)
-					|| (backWall && IsFacingRight)) && !IsWallJumping)
+				if ((frontWall && !IsFacingRight) || (backWall && IsFacingRight))
 				{
 					LastOnWallLeftTime = Data.coyoteTime;
 				}
 			}
 
-			//Two checks needed for both left and right walls since whenever the play turns the wall checkPoints swap sides
+			//Two checks needed for both left and right walls since whenever the player turns the wall checkPoints swap sides
 			LastOnWallTime = Mathf.Max(LastOnWallLeftTime, LastOnWallRightTime);
 		}
 		#endregion
