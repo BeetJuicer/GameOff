@@ -77,10 +77,11 @@ public class PlayerMovement : MonitoredBehaviour
 	[Monitor]
 	private bool isOnWind;
 	private bool isOnIce;
-	// Some of the collision checks are gameObjects, so that we can check for the tags in case of one-way platforms
-	private GameObject isOnGround;
-	private GameObject frontWall;
-	private GameObject backWall;
+
+	// Some of the collision checks are collider2ds, so that we can check for the tags in case of one-way platforms
+	private Collider2D isOnGround;
+	private Collider2D frontWall;
+	private Collider2D backWall;
 
     #endregion
 
@@ -206,7 +207,7 @@ public class PlayerMovement : MonitoredBehaviour
 
 		isOnWind = Physics2D.OverlapBox(transform.position, playerCollider.size, 0, _windLayer);
 		isOnIce = Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _iceLayer);
-		isOnGround = Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _groundLayer).gameObject;
+		isOnGround = Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _groundLayer);
 
         if (!IsDashing && !IsJumping)
 		{
@@ -218,12 +219,14 @@ public class PlayerMovement : MonitoredBehaviour
                     AnimHandler.justLanded = true;
                 }
 
-                // isOnGround is a gameObject, so we can check if the tag is oneWayPlatform
-                if (isOnGround.CompareTag("OneWayPlatform"))
+                // check if the ground's tag is oneWayPlatform
+                if (isOnGround.gameObject.CompareTag("OneWayPlatform"))
 				{
 					// The player is not standing still, which means it's not ON the platform
+					// It's either falling through it or jumping through.
 					if (RB.velocity.y != 0)
 					{
+						// Prevent the player from thinking that it's grounded when in the middle of a platform.
 						LastOnGroundTime = 0;
 						return;
 					}
@@ -234,12 +237,12 @@ public class PlayerMovement : MonitoredBehaviour
 			}
 
 			// Wall Check
-			frontWall = Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer).gameObject;
-			backWall = Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer).gameObject;
+			frontWall = Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer);
+			backWall = Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer);
 
 			// This means the player is inside a one-way platform
-			if (frontWall != null && frontWall.CompareTag("OneWayPlatform")
-			|| backWall != null && backWall.CompareTag("OneWayPlatform"))
+			if (frontWall != null && frontWall.gameObject.CompareTag("OneWayPlatform")
+			|| backWall != null && backWall.gameObject.CompareTag("OneWayPlatform"))
 			{
 				LastOnWallLeftTime = 0;
 				LastOnWallRightTime = 0;
@@ -437,6 +440,11 @@ public class PlayerMovement : MonitoredBehaviour
 		if (IsGliding)
 		{
 			Glide();
+			RB.drag = 0.5f;
+		}
+		else
+		{
+			RB.drag = 0f;
 		}
 
         currentVelocity = RB.velocity;
@@ -491,6 +499,9 @@ public class PlayerMovement : MonitoredBehaviour
 			accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? Data.runAccelAmount : Data.runDeccelAmount;
 		else
 			accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? Data.runAccelAmount * Data.accelInAir : Data.runDeccelAmount * Data.deccelInAir;
+
+		if (isOnIce)
+			accelRate *= (Mathf.Abs(targetSpeed) > 0.01f) ? Data.accelOnIce : Data.decelOnIce;
 		#endregion
 
 		#region Add Bonus Jump Apex Acceleration

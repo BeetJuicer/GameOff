@@ -22,10 +22,12 @@ MonoBehaviour:
   glideRunMaxSpeed: 8.5
   runAcceleration: 11
   runAccelAmount: 50
-  runDecceleration: 2
-  runDeccelAmount: 9.090909
+  runDecceleration: 11
+  runDeccelAmount: 50
   accelInAir: 0.65
   deccelInAir: 0.65
+  accelOnIce: 0.4
+  decelOnIce: 0.4
   doConserveMomentum: 1
   jumpHeight: 3.5
   jumpTimeToApex: 0.3

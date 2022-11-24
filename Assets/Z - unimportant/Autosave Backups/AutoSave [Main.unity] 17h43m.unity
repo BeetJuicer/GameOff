@@ -3310,6 +3310,9 @@ MonoBehaviour:
   _windLayer:
     serializedVersion: 2
     m_Bits: 512
+  _iceLayer:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!114 &8938023638185678926
 MonoBehaviour:
   m_ObjectHideFlags: 0
