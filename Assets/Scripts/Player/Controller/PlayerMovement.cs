@@ -220,7 +220,7 @@ public class PlayerMovement : MonitoredBehaviour
                 }
 
                 // check if the ground's tag is oneWayPlatform
-                if (isOnGround.gameObject.CompareTag("OneWayPlatform"))
+                if (isOnGround != null && isOnGround.gameObject.CompareTag("OneWayPlatform"))
 				{
 					// The player is not standing still, which means it's not ON the platform
 					// It's either falling through it or jumping through.
