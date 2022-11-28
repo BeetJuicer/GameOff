@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +29,10 @@ public class GameManager : MonoBehaviour
     {
         isGamePaused = false;
         pauseMenu.SetActive(false);
+
+        Time.timeScale = 1;
+
+        AudioManager.instance.Play("BG_Theme");
     }
 
     public void OnEscapeInput(InputAction.CallbackContext context)
@@ -46,6 +51,18 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDeath()
     {
+        StartCoroutine("DeathRoutine");
+    }
+
+    private IEnumerator DeathRoutine()
+    {
+        Time.timeScale = 0;
+
+        AudioManager.instance.Play("Death");
+        yield return new WaitForSecondsRealtime(0.3f);
+
+        Time.timeScale = 1;
+
         SceneManager.LoadScene("Main");
     }
 }

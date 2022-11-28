@@ -63,16 +63,18 @@ public class PlayerAnimator : MonoBehaviour
 
     private void CheckAnimationState()
     {
-        /*
+        
         if (startedJumping)
         {
             anim.SetTrigger("Jump");
-            GameObject obj = Instantiate(jumpFX, transform.position - (Vector3.up * transform.localScale.y / 2), Quaternion.Euler(-90, 0, 0));
-            Destroy(obj, 1);
+            AudioManager.instance.Play("Jump");
+            //GameObject obj = Instantiate(jumpFX, transform.position - (Vector3.up * transform.localScale.y / 2), Quaternion.Euler(-90, 0, 0));
+            //Destroy(obj, 1);
             startedJumping = false;
             return;
         }
 
+        /*
         if (justLanded)
         {
             anim.SetTrigger("Land");

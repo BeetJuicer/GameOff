@@ -422,27 +422,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sounds:
   - name: BG_Theme
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: cdfb5274e9512274db7f7eab0d23f9e0, type: 3}
     volume: 0
-    pitch: 0
-    loop: 0
+    pitch: 1
+    loop: 1
     source: {fileID: 0}
   - name: Jump
-    clip: {fileID: 0}
-    volume: 0
-    pitch: 0
-    loop: 0
-    source: {fileID: 0}
-  - name: Run
-    clip: {fileID: 0}
-    volume: 0
-    pitch: 0
-    loop: 0
-    source: {fileID: 0}
-  - name: Glide
-    clip: {fileID: 0}
-    volume: 0
-    pitch: 0
+    clip: {fileID: 8300000, guid: c1b6aea8a74f8854cb9773c34969cd32, type: 3}
+    volume: 1
+    pitch: 1.6
     loop: 0
     source: {fileID: 0}
 --- !u!1 &486154988
@@ -942,10 +930,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.08747856
-    y: 0.08841463
-    width: 0.82332766
-    height: 0.8231707
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -2580,7 +2568,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5472230673933743518, guid: f892dabea477ce24fa7427375b854910, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.44369507
+      value: -0.4437256
       objectReference: {fileID: 0}
     - target: {fileID: 5472230673933743518, guid: f892dabea477ce24fa7427375b854910, type: 3}
       propertyPath: m_AnchoredPosition.y
