@@ -2512,7 +2512,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5472230673933743505, guid: f892dabea477ce24fa7427375b854910, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5472230673933743518, guid: f892dabea477ce24fa7427375b854910, type: 3}
       propertyPath: m_Pivot.x
@@ -2580,7 +2580,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5472230673933743518, guid: f892dabea477ce24fa7427375b854910, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.44369507
+      value: -0.4437256
       objectReference: {fileID: 0}
     - target: {fileID: 5472230673933743518, guid: f892dabea477ce24fa7427375b854910, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3722,6 +3722,11 @@ TilemapCollider2D:
   m_CorrespondingSourceObject: {fileID: 635185616090391501, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
   m_PrefabInstance: {fileID: 856387142}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1519483925 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5472230673933743505, guid: f892dabea477ce24fa7427375b854910, type: 3}
+  m_PrefabInstance: {fileID: 1048645983}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1566747313 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5401315609969487925, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
@@ -3784,6 +3789,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b87e76bb4c3d1543b9d934a2b70ecac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseMenu: {fileID: 1519483925}
 --- !u!1 &1851507674
 GameObject:
   m_ObjectHideFlags: 0

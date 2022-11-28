@@ -11,7 +11,6 @@ public class CheckpointSetter : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             SetCheckpoint();
-            Debug.Log(PlayerPrefs.GetInt("checkpointCount"));
         }
     }
     

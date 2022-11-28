@@ -46,8 +46,6 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDeath()
     {
-        //Juice - impact, play death animation, sound, pEffects
-        //Make a splash square
         SceneManager.LoadScene("Main");
     }
 }
