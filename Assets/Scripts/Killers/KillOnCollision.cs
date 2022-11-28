@@ -9,9 +9,7 @@ public class KillOnCollision : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            //Juice - impact, play death animation, sound, pEffects
-            //Make a splash square
-            SceneManager.LoadScene("Main");
+            GameManager.instance.PlayerDeath();
         }
     }
 }

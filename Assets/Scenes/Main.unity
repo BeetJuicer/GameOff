@@ -942,10 +942,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.08747856
+    y: 0.08841463
+    width: 0.82332766
+    height: 0.8231707
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -2512,7 +2512,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5472230673933743505, guid: f892dabea477ce24fa7427375b854910, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5472230673933743518, guid: f892dabea477ce24fa7427375b854910, type: 3}
       propertyPath: m_Pivot.x
@@ -3722,6 +3722,11 @@ TilemapCollider2D:
   m_CorrespondingSourceObject: {fileID: 635185616090391501, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
   m_PrefabInstance: {fileID: 856387142}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1519483925 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5472230673933743505, guid: f892dabea477ce24fa7427375b854910, type: 3}
+  m_PrefabInstance: {fileID: 1048645983}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1566747313 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5401315609969487925, guid: f9ddc1f4f92b429498df890c23498a98, type: 3}
@@ -3784,6 +3789,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b87e76bb4c3d1543b9d934a2b70ecac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseMenu: {fileID: 1519483925}
 --- !u!1 &1851507674
 GameObject:
   m_ObjectHideFlags: 0
@@ -4319,12 +4325,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8938023638185678922}
+  - component: {fileID: 8938023638185678926}
   - component: {fileID: 8415326625250017101}
   - component: {fileID: 8317574274842147126}
   - component: {fileID: 3387101970449049909}
   - component: {fileID: 7214467250224695365}
   - component: {fileID: 8938023638185678929}
-  - component: {fileID: 8938023638185678926}
   - component: {fileID: 8938023638185678925}
   - component: {fileID: 8938023638185678927}
   - component: {fileID: 8938023638185678928}
@@ -4581,6 +4587,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 32671732-74e8-4d26-b998-5b3f2d1d8e26
     m_ActionName: Gameplay/New action
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1586639928}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: OnEscapeInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: fd6548e7-bfbb-43e7-9a8d-f60f432f6ea5
+    m_ActionName: Gameplay/Pause[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay
