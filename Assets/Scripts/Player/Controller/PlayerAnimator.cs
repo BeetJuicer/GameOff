@@ -82,10 +82,11 @@ public class PlayerAnimator : MonoBehaviour
             Destroy(obj, 1);
             justLanded = false;
             return;
-        }
+        }*/
 
-        anim.SetFloat("Vel Y", mov.RB.velocity.y);*/
-
-        anim.SetBool("move", mov.NormInputX != 0 && mov.IsRunning);
+        anim.SetBool("death", GameManager.instance.isGameOver);
+        anim.SetBool("fall", mov.RB.velocity.y < -0.01f && mov.LastOnGroundTime > 0.01f);
+        anim.SetBool("jump", mov.IsJumping);
+        anim.SetBool("move", mov.NormInputX != 0 && mov.IsRunning && !mov.IsJumping);
     }
 }

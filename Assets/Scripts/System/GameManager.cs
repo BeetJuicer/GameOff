@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public bool isGamePaused { get; private set; }
+    public bool isGameOver { get; private set; }
 
     [SerializeField] 
     private GameObject pauseMenu;
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         isGamePaused = false;
+        isGameOver = false;
         pauseMenu.SetActive(false);
 
         Time.timeScale = 1;
@@ -51,11 +53,15 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDeath()
     {
+        isGameOver = true;
         StartCoroutine("DeathRoutine");
     }
 
     private IEnumerator DeathRoutine()
     {
+        // Wait a little to let the death animation play.
+        yield return new WaitForSeconds(0.1f);
+        //Freeze the game
         Time.timeScale = 0;
 
         AudioManager.instance.Play("Death");
