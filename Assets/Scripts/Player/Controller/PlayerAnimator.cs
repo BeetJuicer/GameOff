@@ -21,16 +21,21 @@ public class PlayerAnimator : MonoBehaviour
     public bool startedJumping {  private get; set; }
     public bool justLanded { private get; set; }
 
-    public float currentVelY;
-
     private void Start()
     {
         mov = GetComponent<PlayerMovement>();
         spriteRend = GetComponentInChildren<SpriteRenderer>();
         anim = spriteRend.GetComponent<Animator>();
 
+        anim.SetBool("death", false);
+
 //        _jumpParticle = jumpFX.GetComponent<ParticleSystem>();
 //        _landParticle = landFX.GetComponent<ParticleSystem>();
+    }
+
+    private void Update()
+    {
+        SetAnimationBools();
     }
 
     private void LateUpdate()
@@ -62,8 +67,7 @@ public class PlayerAnimator : MonoBehaviour
     }
 
     private void CheckAnimationState()
-    {
-        
+    {       
         if (startedJumping)
         {
             anim.SetTrigger("Jump");
@@ -84,9 +88,15 @@ public class PlayerAnimator : MonoBehaviour
             return;
         }*/
 
+    }
+
+    private void SetAnimationBools()
+    {
         anim.SetBool("death", GameManager.instance.isGameOver);
-        anim.SetBool("fall", mov.RB.velocity.y < -0.01f && mov.LastOnGroundTime > 0.01f);
+        anim.SetBool("fall", mov.RB.velocity.y < 0 && mov.LastOnGroundTime < 0);
         anim.SetBool("jump", mov.IsJumping);
-        anim.SetBool("move", mov.NormInputX != 0 && mov.IsRunning && !mov.IsJumping);
+        anim.SetBool("move", mov.IsRunning && !mov.IsJumping);
+        anim.SetBool("idle", !mov.IsRunning && !mov.IsJumping);
+        
     }
 }

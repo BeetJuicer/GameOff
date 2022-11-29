@@ -423,14 +423,14 @@ MonoBehaviour:
   sounds:
   - name: BG_Theme
     clip: {fileID: 8300000, guid: cdfb5274e9512274db7f7eab0d23f9e0, type: 3}
-    volume: 0
+    volume: 0.4
     pitch: 1
     loop: 1
     source: {fileID: 0}
   - name: Jump
     clip: {fileID: 8300000, guid: c1b6aea8a74f8854cb9773c34969cd32, type: 3}
-    volume: 1
-    pitch: 1.6
+    volume: 0.9
+    pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: Death
@@ -936,10 +936,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.21266428
-    y: 0.21231423
-    width: 0.5734767
-    height: 0.57324845
+    x: 0.01996008
+    y: 0.021276595
+    width: 0.9580838
+    height: 0.95744675
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -4616,7 +4616,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTilt: 0
   tiltSpeed: 0
-  currentVelY: 0
 --- !u!114 &8938023638185678928
 MonoBehaviour:
   m_ObjectHideFlags: 0

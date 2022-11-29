@@ -27,7 +27,7 @@ MonoBehaviour:
   accelInAir: 0.65
   deccelInAir: 0.3
   accelOnIce: 0.05
-  decelOnIce: 0.005
+  decelOnIce: 0.02
   doConserveMomentum: 1
   jumpHeight: 3.5
   jumpTimeToApex: 0.3

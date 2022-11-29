@@ -433,6 +433,12 @@ MonoBehaviour:
     pitch: 1.6
     loop: 0
     source: {fileID: 0}
+  - name: Death
+    clip: {fileID: 8300000, guid: 999957b013c8f134f978555ff7877ab3, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
 --- !u!1 &486154988
 GameObject:
   m_ObjectHideFlags: 0
@@ -930,10 +936,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.21266428
+    y: 0.21231423
+    width: 0.5734767
+    height: 0.57324845
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60

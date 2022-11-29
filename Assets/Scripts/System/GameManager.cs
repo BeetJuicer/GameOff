@@ -59,16 +59,18 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator DeathRoutine()
     {
+        AudioManager.instance.Stop("BG_Theme");
         // Wait a little to let the death animation play.
         yield return new WaitForSeconds(0.1f);
+
         //Freeze the game
         Time.timeScale = 0;
 
+        //Let the death audio play before resetting the scene
         AudioManager.instance.Play("Death");
         yield return new WaitForSecondsRealtime(0.3f);
 
         Time.timeScale = 1;
-
         SceneManager.LoadScene("Main");
     }
 }
