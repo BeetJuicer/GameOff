@@ -6,12 +6,14 @@ public class PlayerRespawner : MonoBehaviour
 {
     private GameObject player;
 
-    [SerializeField]
+    [SerializeField] 
+    private GameObject checkpoints;
     private Transform[] respawnPoints;
 
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        respawnPoints = checkpoints.GetComponentsInChildren<Transform>();
     }
 
     // Start is called before the first frame update
