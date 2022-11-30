@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 1347853953599249336}
   - component: {fileID: 1347853953599249337}
   - component: {fileID: 1347853953599249338}
+  - component: {fileID: 7473975371106252051}
+  - component: {fileID: -596894297362218876}
   m_Layer: 0
   m_Name: Jump Pad
   m_TagString: Untagged
@@ -125,3 +127,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   springPushForce: 35
+  pushAnim: {fileID: 7400000, guid: f0620e7bc2e49014792e103c682bd497, type: 2}
+--- !u!95 &7473975371106252051
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347853953599249342}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 776de7db1c7f0164bbcb1e1e300b4ce4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-596894297362218876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347853953599249342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad50f81b1d25c441943c37a89ba23f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Animator: {fileID: 7473975371106252051}
+  _ActionOnDisable: 0

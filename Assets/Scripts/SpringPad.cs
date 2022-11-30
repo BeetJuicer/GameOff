@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Animancer;
 
 public class SpringPad : MonoBehaviour
 {
     [SerializeField]
     private float springPushForce;
+
+    [SerializeField]
+    private AnimationClip pushAnim;
 
     private Animator anim;
 
@@ -18,7 +22,7 @@ public class SpringPad : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            //play animation
+            anim.Play(pushAnim.name, -1, 0f);
             //set current velocity to 0 before adding push
             collision.GetComponent<Rigidbody2D>().velocity *= Vector2.right;
             collision.GetComponent<Rigidbody2D>().AddForce(Vector2.up * springPushForce, ForceMode2D.Impulse);
