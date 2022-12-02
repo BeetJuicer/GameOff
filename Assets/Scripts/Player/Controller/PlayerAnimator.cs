@@ -70,7 +70,6 @@ public class PlayerAnimator : MonoBehaviour
     {       
         if (startedJumping)
         {
-            //anim.SetTrigger("Jump");
             AudioManager.instance.Play("Jump");
             //GameObject obj = Instantiate(jumpFX, transform.position - (Vector3.up * transform.localScale.y / 2), Quaternion.Euler(-90, 0, 0));
             //Destroy(obj, 1);
@@ -97,6 +96,6 @@ public class PlayerAnimator : MonoBehaviour
         anim.SetBool("fall", mov.RB.velocity.y < 0 && mov.LastOnGroundTime < 0 && !mov.IsSliding);
         anim.SetBool("jump", mov.IsJumping);
         anim.SetBool("move", mov.IsRunning && !mov.IsJumping);
-        anim.SetBool("idle", !mov.IsRunning && !mov.IsJumping && !mov.IsSliding);
+        anim.SetBool("idle", !mov.IsRunning && !mov.IsJumping && !mov.IsSliding && mov.RB.velocity.y == 0);
     }
 }
