@@ -70,7 +70,7 @@ public class PlayerAnimator : MonoBehaviour
     {       
         if (startedJumping)
         {
-            anim.SetTrigger("Jump");
+            //anim.SetTrigger("Jump");
             AudioManager.instance.Play("Jump");
             //GameObject obj = Instantiate(jumpFX, transform.position - (Vector3.up * transform.localScale.y / 2), Quaternion.Euler(-90, 0, 0));
             //Destroy(obj, 1);

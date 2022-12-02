@@ -356,8 +356,9 @@ public class PlayerMovement : MonitoredBehaviour
 			}
 			#endregion
 
-			#region GLIDE CHECKS
 
+			#region GLIDE CHECKS
+			/*
 			if (!IsGliding && CanGlide() && LastPressedJumpTime > 0 && !jumpInputStop)
 			{
 				IsJumping = false;
@@ -367,7 +368,7 @@ public class PlayerMovement : MonitoredBehaviour
 			if (IsGliding && (jumpInputStop || LastOnGroundTime > 0 || LastOnWallTime > 0))
 			{
 				IsGliding = false;
-			}
+			}*/
 			#endregion
 
 			#region GRAVITY
@@ -441,6 +442,7 @@ public class PlayerMovement : MonitoredBehaviour
 			if (IsSliding)
 				Slide();
 
+			/*
 			//Handle Glide
 			if (IsGliding)
 			{
@@ -450,7 +452,7 @@ public class PlayerMovement : MonitoredBehaviour
 			else
 			{
 				RB.drag = 0f;
-			}
+			}*/
 
 			currentVelocity = RB.velocity;
 		}
@@ -662,9 +664,9 @@ public class PlayerMovement : MonitoredBehaviour
 		RB.AddForce(movement * Vector2.up);
 	}
 
+	/*
 	private void Glide()
 	{
-		//TODO: set gravity scale lower, but not 0?
 
 		float targetSpeed = -Data.glideMaxFallSpeed;
 
@@ -683,7 +685,7 @@ public class PlayerMovement : MonitoredBehaviour
 			//Apply the force.
 			RB.AddForce(movement * Vector2.up);
 		}
-	}
+	}*/
 	#endregion
 
 	#region CHECK METHODS
@@ -701,7 +703,6 @@ public class PlayerMovement : MonitoredBehaviour
 	private bool CanGlide()
 	{
 		return LastOnGroundTime <= 0 && !IsJumping && LastOnWallTime <= 0;
-
     }
 
 	private bool CanWallJump()
