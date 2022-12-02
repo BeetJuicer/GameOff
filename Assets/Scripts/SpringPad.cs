@@ -15,7 +15,7 @@ public class SpringPad : MonoBehaviour
 
     private void Start()
     {
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -25,11 +25,7 @@ public class SpringPad : MonoBehaviour
             anim.Play(pushAnim.name, -1, 0f);
             //set current y velocity to 0 before adding push
             collision.GetComponent<Rigidbody2D>().velocity *= Vector2.right;
-            Debug.Log("1");
-            Debug.Log(collision.GetComponent<Rigidbody2D>().velocity);
             collision.GetComponent<Rigidbody2D>().AddForce(Vector2.up * springPushForce, ForceMode2D.Impulse);
-            Debug.Log("2");
-            Debug.Log(collision.GetComponent<Rigidbody2D>().velocity);
         }
     }
 }
