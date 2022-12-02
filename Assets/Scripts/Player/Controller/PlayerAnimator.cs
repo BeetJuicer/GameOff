@@ -93,10 +93,10 @@ public class PlayerAnimator : MonoBehaviour
     private void SetAnimationBools()
     {
         anim.SetBool("death", GameManager.instance.isGameOver);
-        anim.SetBool("fall", mov.RB.velocity.y < 0 && mov.LastOnGroundTime < 0);
+        anim.SetBool("wallSlide", mov.IsSliding);
+        anim.SetBool("fall", mov.RB.velocity.y < 0 && mov.LastOnGroundTime < 0 && !mov.IsSliding);
         anim.SetBool("jump", mov.IsJumping);
         anim.SetBool("move", mov.IsRunning && !mov.IsJumping);
-        anim.SetBool("idle", !mov.IsRunning && !mov.IsJumping);
-        
+        anim.SetBool("idle", !mov.IsRunning && !mov.IsJumping && !mov.IsSliding);
     }
 }
