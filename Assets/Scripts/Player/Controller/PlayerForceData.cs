@@ -19,7 +19,6 @@ public class PlayerForceData : ScriptableObject
 
 	[Header("Run")]
 	public float runMaxSpeed; //Target speed we want the player to reach.
-	public float glideRunMaxSpeed;
     [Space(5)]
     public float runAcceleration; //The speed at which our player accelerates to max speed, can be set to runMaxSpeed for instant acceleration down to 0 for none at all
 	[HideInInspector] public float runAccelAmount; //The actual force (multiplied with speedDiff) applied to the player.
@@ -62,33 +61,9 @@ public class PlayerForceData : ScriptableObject
 	public float slideSpeed;
 	public float slideAccel;
 
-	[Header("Glide")]
-	[Range(0f, 1f)] public float glideRunLerp;
-	public float glideMaxFallSpeed;
-    [HideInInspector] public float glideYAxisAcceleration;//hide for now
-	public float lift;
-	[HideInInspector] public float glideYAxisAccelAmount;
-
     [Header("Assists")]
 	[Range(0.01f, 0.5f)] public float coyoteTime; //Grace period after falling off a platform, where you can still jump
 	[Range(0.01f, 0.5f)] public float jumpInputBufferTime; //Grace period after pressing jump where a jump will be automatically performed once the requirements (eg. being grounded) are met.
-
-	[Space(20)]
-
-	[Header("Dash")]
-	public int dashAmount;
-	public float dashSpeed;
-	public float dashSleepTime; //Duration for which the game freezes when we press dash but before we read directional input and apply a force
-	[Space(5)]
-	public float dashAttackTime;
-	[Space(5)]
-	public float dashEndTime; //Time after you finish the inital drag phase, smoothing the transition back to idle (or any standard state)
-	public Vector2 dashEndSpeed; //Slows down player, makes dash feel more responsive (used in Celeste)
-	[Range(0f, 1f)] public float dashEndRunLerp; //Slows the affect of player movement while dashing
-	[Space(5)]
-	public float dashRefillTime;
-	[Space(5)]
-	[Range(0.01f, 0.5f)] public float dashInputBufferTime;
 	
 
 	//Unity Callback, called when the inspector updates
@@ -97,7 +72,6 @@ public class PlayerForceData : ScriptableObject
 		#region Variable Ranges
 		runAcceleration = Mathf.Clamp(runAcceleration, 0.01f, runMaxSpeed);
 		runDecceleration = Mathf.Clamp(runDecceleration, 0.01f, runMaxSpeed);
-		glideYAxisAcceleration = Mathf.Clamp(glideYAxisAcceleration, 0.01f, glideMaxFallSpeed);
 		#endregion
 
 		//Calculate gravity strength using the formula (gravity = 2 * jumpHeight / timeToJumpApex^2) 
@@ -109,9 +83,6 @@ public class PlayerForceData : ScriptableObject
 		//Calculate are run acceleration & deceleration forces using formula: amount = ((1 / Time.fixedDeltaTime) * acceleration) / runMaxSpeed
 		runAccelAmount = (50 * runAcceleration) / runMaxSpeed;
 		runDeccelAmount = (50 * runDecceleration) / runMaxSpeed;
-
-		glideYAxisAcceleration = glideMaxFallSpeed;//temp
-		glideYAxisAccelAmount = (50 * glideYAxisAcceleration) / glideMaxFallSpeed;
 
 		//Calculate jumpForce using the formula (initialJumpVelocity = gravity * timeToJumpApex)
 		jumpForce = Mathf.Abs(gravityStrength) * jumpTimeToApex;
