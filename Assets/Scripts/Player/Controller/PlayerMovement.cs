@@ -547,6 +547,11 @@ public class PlayerMovement : MonitoredBehaviour
 		return IsJumping && RB.velocity.y > 0;
     }
 
+	public void SetJumpCutFalse()
+	{
+		_isJumpCut = false;
+	}
+
 	private bool CanWallJumpCut()
 	{
 		return IsWallJumping && RB.velocity.y > 0;

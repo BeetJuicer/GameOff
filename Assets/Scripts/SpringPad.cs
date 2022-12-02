@@ -24,6 +24,7 @@ public class SpringPad : MonoBehaviour
         {
             anim.Play(pushAnim.name, -1, 0f);
             //set current y velocity to 0 before adding push
+            collision.GetComponent<PlayerMovement>().SetJumpCutFalse();
             collision.GetComponent<Rigidbody2D>().velocity *= Vector2.right;
             collision.GetComponent<Rigidbody2D>().AddForce(Vector2.up * springPushForce, ForceMode2D.Impulse);
         }
