@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
-    //TODO: Import player momentum and play around with it.
-
     // PLATFORM
     private Rigidbody2D rb;
     private PlatformState _state = PlatformState.Idle;
@@ -31,7 +29,6 @@ public class MovingPlatform : MonoBehaviour
     [Space(10)]
     [SerializeField] private float minIdleTime;
     private float _timeInIdle;
-    private Vector2 _moveDir;
 
     [Header("Layers & Tags")]
     [SerializeField] private string playerTag;
@@ -40,7 +37,6 @@ public class MovingPlatform : MonoBehaviour
     {
 
         _player = FindObjectOfType<PlayerMovement>();
-        //_player = FindObjectOfType<PlayerMomentum>();
         _playerParent = _player.transform.parent;
         rb = GetComponent<Rigidbody2D>();
 
@@ -56,9 +52,6 @@ public class MovingPlatform : MonoBehaviour
         {
             case PlatformState.Idle:
                 _timeInIdle += Time.deltaTime;
-                _momentumTime += Time.deltaTime;
-
-                _moveDir = Vector2.zero;
 
                 // Guard Clause: prevents changing state before we've been in idle for "minIdleTime"
                 if (_timeInIdle < minIdleTime)
@@ -81,13 +74,11 @@ public class MovingPlatform : MonoBehaviour
             case PlatformState.Moving:
                 //Move towards endPos at constant speed
                 transform.position = Vector2.MoveTowards(transform.position, endPos, moveSpeed);
-                //_moveDir = (endPos - (Vector2)transform.position).normalized;
 
                 // Stop when we get to endPos
                 if (CheckDistance(transform.position, endPos, reachedTargetTheshold))
                 {
                     _state = PlatformState.Idle;
-                   // _player.AddMomentum(momentumForce * (endPos - startPos).normalized, momentumBufferTime);
                     _momentumTime = 0;
                 }
                 break;
@@ -95,7 +86,6 @@ public class MovingPlatform : MonoBehaviour
             case PlatformState.Returning:
                 //Move back to startPos at constant speed
                 transform.position = Vector2.MoveTowards(transform.position, startPos, returnSpeed);
-                //_moveDir = (startPos - (Vector2)transform.position).normalized;
 
                 // Stop when we get to startPos
                 if (CheckDistance(transform.position, startPos, reachedTargetTheshold))

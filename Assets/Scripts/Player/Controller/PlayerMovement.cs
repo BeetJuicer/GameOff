@@ -195,7 +195,7 @@ public class PlayerMovement : MonitoredBehaviour
 
 			if (!IsJumping)
 			{
-				//Ground Check - if on groundlayer or ice layer and not jumping.
+				//Ground Check - if on ground layer or ice layer and not jumping.
 				if ((isOnIce || isOnGround) && !IsJumping) //checks if set box overlaps with ground
 				{
 					if (LastOnGroundTime < -0.1f)
@@ -208,7 +208,7 @@ public class PlayerMovement : MonitoredBehaviour
 					{
 						// The player is not standing still, which means it's not ON the platform
 						// It's either falling through it or jumping through.
-						if (RB.velocity.y != 0)
+						if (MathF.Abs(RB.velocity.y) > 0.01f)
 						{
 							// Prevent the player from thinking that it's grounded when in the middle of a platform.
 							LastOnGroundTime = 0;
@@ -216,7 +216,7 @@ public class PlayerMovement : MonitoredBehaviour
 						}
 					}
 
-					//if so set the lastGrounded to coyoteTime
+					//Set the lastGrounded to coyoteTime
 					LastOnGroundTime = Data.coyoteTime; 
 				}
 
@@ -373,7 +373,6 @@ public class PlayerMovement : MonitoredBehaviour
     public void SetGravityScale(float scale)
 	{
 		RB.gravityScale = scale;
-		Debug.Log($"Gravity: {RB.gravityScale}");
 	}
 
 	private void AssignNegativeVelocity()
@@ -547,9 +546,11 @@ public class PlayerMovement : MonitoredBehaviour
 		return IsJumping && RB.velocity.y > 0;
     }
 
-	public void SetJumpCutFalse()
+	public void JumpPadContact()
 	{
 		_isJumpCut = false;
+		SetGravityScale(Data.gravityScale);
+		IsJumping = true;
 	}
 
 	private bool CanWallJumpCut()
