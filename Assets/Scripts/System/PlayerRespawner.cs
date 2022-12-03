@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerRespawner : MonoBehaviour
@@ -10,17 +11,11 @@ public class PlayerRespawner : MonoBehaviour
     private GameObject checkpoints;
     private Transform[] respawnPoints;
 
-    private void Awake()
-    {
-        //checkpoint starts at 1
-        PlayerPrefs.SetInt("currentCheckpoint", 1);
-        player = GameObject.FindGameObjectWithTag("Player");
-        respawnPoints = checkpoints.GetComponentsInChildren<Transform>();
-    }
-
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
+        respawnPoints = checkpoints.GetComponentsInChildren<Transform>().Skip(1).ToArray();
         player.transform.position = respawnPoints[PlayerPrefs.GetInt("currentCheckpoint")].position;
     }
 }

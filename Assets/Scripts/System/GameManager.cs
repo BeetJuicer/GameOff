@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public bool isGamePaused { get; private set; }
     public bool isGameOver { get; private set; }
 
+    [HideInInspector]
     public bool isInputDisabled;
 
     [SerializeField] 
