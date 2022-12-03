@@ -5,14 +5,12 @@
 
 	Feel free to use this in your own games, and I'd love to see anything you make!
  */
-
-using Baracuda.Monitoring;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonitoredBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     //Scriptable object which holds all the player's movement parameters. If you don't want to use it
     //just paste in all the parameters, though you will need to manualy change all references in this script
@@ -31,32 +29,20 @@ public class PlayerMovement : MonitoredBehaviour
 	//These are fields which can are public allowing for other sctipts to read them
 	//but can only be privately written to.
 	public bool IsFacingRight { get; private set; }
-
-    [Monitor]
-    public bool IsRunning { get; private set; }
-    [Monitor]
-    public bool IsJumping { get; private set; }
-    [Monitor]
-    public bool IsWallJumping { get; private set; }
-	[Monitor]
-	public bool IsSliding { get; private set; }
-	[Monitor]
+    public bool IsRunning { get; private set; }    
+    public bool IsJumping { get; private set; }    
+    public bool IsWallJumping { get; private set; }	
+	public bool IsSliding { get; private set; }	
     public bool IsGliding { get; private set; }
-
     //Timers (also all fields, could be private and a method returning a bool could be used)
-    [Monitor]
 	public float LastOnGroundTime { get; private set; }
 	public float LastOnWallTime { get; private set; }
 	public float LastOnWallRightTime { get; private set; }
 	public float LastOnWallLeftTime { get; private set; }
-	public float LastOnWindTime { get; private set; }
 
 	//Jump
 	private bool _isJumpCut;
 	private bool _isJumpFalling;
-
-	//Platform
-	private bool isPassingThroughPlatform;
 
     //Wall Jump
     private float _wallJumpStartTime;
@@ -66,8 +52,6 @@ public class PlayerMovement : MonitoredBehaviour
     private bool shouldAssignNegative;
 
 	// Collision Checks
-	[Monitor]
-	private bool isOnWind;
 	private bool isOnIce;
 
 	// Some of the collision checks are collider2ds, so that we can check for the tags in case of one-way platforms
@@ -130,30 +114,16 @@ public class PlayerMovement : MonitoredBehaviour
     #region LAYERS & TAGS
     [Header("Layers & Tags")]
 	[SerializeField] private LayerMask _groundLayer;
-	[SerializeField] private LayerMask _windLayer;
 	[SerializeField] private LayerMask _iceLayer;
     #endregion
 
-    #region MONITOR VARIABLES
-    [Monitor]
-	Vector2 currentVelocity = Vector2.zero;
-    //[Monitor]
-    float movement;
-    #endregion
-
-    protected override void Awake()
+    private void Awake()
 	{
-		base.Awake();
 
 		RB = GetComponent<Rigidbody2D>();
 		AnimHandler = GetComponent<PlayerAnimator>();
 		PlatformHandler = GetComponent<PlayerOneWayPlatform>();
 		playerCollider = GetComponent<BoxCollider2D>();
-	}
-
-	protected override void OnDestroy()
-	{
-		base.OnDestroy();
 	}
 
 	private void Start()
@@ -175,7 +145,6 @@ public class PlayerMovement : MonitoredBehaviour
 			LastOnWallTime -= Time.deltaTime;
 			LastOnWallRightTime -= Time.deltaTime;
 			LastOnWallLeftTime -= Time.deltaTime;
-			LastOnWindTime -= Time.deltaTime;
 
 			LastPressedJumpTime -= Time.deltaTime;
 			#endregion
@@ -188,8 +157,6 @@ public class PlayerMovement : MonitoredBehaviour
 			#endregion
 
 			#region COLLISION CHECKS
-
-			isOnWind = Physics2D.OverlapBox(transform.position, playerCollider.size, 0, _windLayer);
 			isOnIce = Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _iceLayer);
 			isOnGround = Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _groundLayer);
 
@@ -252,8 +219,6 @@ public class PlayerMovement : MonitoredBehaviour
 			#endregion
 
 			#region JUMP CHECKS
-			isPassingThroughPlatform = PlatformHandler.isPassingThroughPlatform;
-
 			if (IsJumping && RB.velocity.y < 0)
 			{
 				IsJumping = false;
@@ -364,8 +329,6 @@ public class PlayerMovement : MonitoredBehaviour
 			//Handle Slide
 			if (IsSliding)
 				Slide();
-
-			currentVelocity = RB.velocity;
 		}
 	}
 
