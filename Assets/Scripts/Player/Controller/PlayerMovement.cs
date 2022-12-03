@@ -164,7 +164,7 @@ public class PlayerMovement : MonitoredBehaviour
 
 	private void Update()
 	{
-		if (!GameManager.instance.isGamePaused)
+		if (!GameManager.instance.isGamePaused && !GameManager.instance.isInputDisabled)
 		{
 			#region MONITORED
 			IsRunning = (NormInputX != 0 && LastOnGroundTime > 0);
@@ -353,7 +353,7 @@ public class PlayerMovement : MonitoredBehaviour
 
 	private void FixedUpdate()
 	{
-		if (!GameManager.instance.isGamePaused)
+		if (!GameManager.instance.isGamePaused && !GameManager.instance.isInputDisabled)
 		{
 			//Handle Run
 			if (IsWallJumping)

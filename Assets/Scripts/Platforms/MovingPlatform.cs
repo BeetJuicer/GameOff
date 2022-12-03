@@ -14,11 +14,6 @@ public class MovingPlatform : MonoBehaviour
     private Transform _playerParent;
     private bool _isPassenger;
 
-    [Header("Player")]
-    [SerializeField] private float momentumForce;
-    [SerializeField] private float momentumBufferTime;
-    private float _momentumTime;
-
     [Header("Movement")]
     [SerializeField] private Vector2 relativeTargetPos;
     private Vector2 startPos;
@@ -79,7 +74,6 @@ public class MovingPlatform : MonoBehaviour
                 if (CheckDistance(transform.position, endPos, reachedTargetTheshold))
                 {
                     _state = PlatformState.Idle;
-                    _momentumTime = 0;
                 }
                 break;
 

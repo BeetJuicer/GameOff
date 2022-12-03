@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public bool isGamePaused { get; private set; }
     public bool isGameOver { get; private set; }
 
+    public bool isInputDisabled;
+
     [SerializeField] 
     private GameObject pauseMenu;
 
@@ -30,6 +32,7 @@ public class GameManager : MonoBehaviour
     {
         isGamePaused = false;
         isGameOver = false;
+        isInputDisabled = false;
         pauseMenu.SetActive(false);
 
         Time.timeScale = 1;

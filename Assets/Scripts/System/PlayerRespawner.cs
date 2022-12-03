@@ -12,6 +12,8 @@ public class PlayerRespawner : MonoBehaviour
 
     private void Awake()
     {
+        //checkpoint starts at 1
+        PlayerPrefs.SetInt("currentCheckpoint", 1);
         player = GameObject.FindGameObjectWithTag("Player");
         respawnPoints = checkpoints.GetComponentsInChildren<Transform>();
     }
