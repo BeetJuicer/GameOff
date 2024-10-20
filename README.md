@@ -1,7 +1,7 @@
-# YOUR PROJECT TITLE
-#### Video Demo:  <URL HERE>
+# LITTLE PENGUIN
+#### Video Demo:  https://youtu.be/4nG7E4brBSs
 #### Description:
-Little Penguin is a short platformer game where you play as a penguin. 
+Little Penguin is a short platformer game where you play as a penguin. Final project for CS50X.
 
 ## Menu Scene
 
